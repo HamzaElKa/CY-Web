@@ -7,7 +7,7 @@ body {
 
 .headerProfile {
     text-align: center;
-    background-color: #333;
+    background-color: red;
     color: #fff;
     padding: 20px 0;
 }
@@ -40,7 +40,7 @@ button {
 }
 
 button {
-    background-color: #333;
+    background-color: red;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
