@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSCRIPTION</title>
+    <link rel="stylesheet" href="style_insc.css">
+</head>
+<body>
+    <header class="headerProfile">
+        <img class="arrowDown" src="arrow_down.png" alt="arrow down">
+        <h1>Créer un compte</h1>
+        <img class="arrowDown" src="arrow_down.png" alt="arrow down">
+    </header>
+    <div class="containerRegistration">
+        <form method="POST" action="account_creation.php">
+            <label for="firstname">Prénom</label><br>
+            <input type="text" name="firstname" maxlength="20" required><br>
+            <label for="name">Nom</label><br>
+            <input type="text" name="name" maxlength="20" required><br>
+            <label for="birthdate">Date de naissance</label><br>
+            <input type="date" name="birthdate" required><br>
+            <label for="genre">Genre</label><br>
+            <input type="radio" name="genre" id="homme" checked value="homme">
+            <label for="homme">Homme</label>
+            <input type="radio" name="genre" id="femme" value="femme">
+            <label for="Femme">Femme</label><br>
+            <label for="city">Ville</label><br>
+            <input type="text" name="city" placeholder="Cergy" maxlength="25" required><br>
+            <label for="email">Adresse mail</label><br>
+            <input type="email" name="email"><br>
+            <label for="password">Mot de Passe</label><br>
+            <input type="password" name="password" maxlength="20"><br>
+            <label for="passwordConf">Confirmation du mot de passe</label><br>
+            <input type="password" name="passwordConf" maxlength="20"><br>
+            <label for="hobbies">Loisirs</label><br>
+            <input type="checkbox" id="sport" name="hobbies[]" value="danse">
+            <label for="dance">Danse</label>
+            <input type="checkbox" id="videogames" name="hobbies[]" value="jeux-vidéos">
+            <label for="videogames">Jeux vidéos</label>
+            <input type="checkbox" id="movies" name="hobbies[]" value="films">
+            <label for="movies">Films</label><br>
+            <input type="checkbox" id="music" name="hobbies[]" value="musique">
+            <label for="music">Musique</label>
+            <input type="checkbox" id="skateboard" name="hobbies[]" value="skateboard">
+            <label for="skateboard">Skateboard</label><br>
+            <input type="checkbox" id="manga" name="hobbies[]" value="manga">
+            <label for="manga">Manga</label>
+            <input type="checkbox" id="cooking" name="hobbies[]" value="cuisiner">
+            <label for="cooking">Cuisiner</label><br>
+            <button name="submit" type="submit">S'inscrire</button>
+        </form>
+        <a href="index.html">Revenir à l'accueil</a>
+        <a href="page_connexion.html">Déjà membre ? Connectez-vous ici</a>
+        <a href="index.html" id="lien-accueil"><img src="logoAI.jpg" alt="Accueil"></a>
+    </div>

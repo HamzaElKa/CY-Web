@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONNEXION</title>
+    <link rel="stylesheet" href="style_connexion.css">
+</head>
+<body>
+    <header class="headerProfile">
+        <h1>Connexion</h1>
+    </header>
+    <div class="containerLogin">
+        <form action="login.php" method="POST">
+            <label for="username">Nom d'utilisateur:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Mot de passe:</label><br>
+            <input type="password" id="password" name="password" required><br>
+            <button type="submit">Se connecter</button>
+        </form>
+        <a href="index.html">Revenir à l'accueil</a>
+        <a href="page_inscription.html">Pas membre ? Inscrivez-vous ici</a>
+        <a href="index.html" id="lien-accueil"><img src="logoAI.jpg" alt="Accueil"></a>
+    </div>
+</body>
+</html>
