@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="style_insc.css">
 </head>
 <body>
+    <a href="index.html" id="lien-accueil">
+        <h1>Cardate</h1>
+      </a>
     <header class="headerProfile">
-        <img class="arrowDown" src="arrow_down.png" alt="arrow down">
         <h1>Créer un compte</h1>
-        <img class="arrowDown" src="arrow_down.png" alt="arrow down">
     </header>
     <div class="containerRegistration">
         <form method="POST" action="account_creation.php">
@@ -43,10 +44,10 @@
             <input type="password" name="password" maxlength="20"><br>
             <label for="passwordConf">Confirmation du mot de passe</label><br>
             <input type="password" name="passwordConf" maxlength="20"><br>
-         
+          <label for="profile_pic">Photo de profil</label><br>
+          <input type="file" name="profile_pic" accept="image/*"><br>
             <button name="submit" type="submit">S'inscrire</button>
         </form>
         <a href="index.html">Revenir à l'accueil</a>
         <a href="page_connexion.html">Déjà membre ? Connectez-vous ici</a>
-        <a href="index.html" id="lien-accueil"><img src="logoAI.jpg" alt="Accueil"></a>
-    </div>  
+    </div>
