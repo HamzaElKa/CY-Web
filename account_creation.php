@@ -1,7 +1,5 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(isset($_POST['ok'])) {
-        var_dump($_POST);
         $firstname = $_POST["firstname"];
         $name = $_POST["name"];
         $birthdate = $_POST["birthdate"];
@@ -14,8 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passwordConf = $_POST["passwordConf"];
         $filename = 'utilisateurs.txt';
         $data = $firstname . ',' .$name . ',' . $birthdate . ',' . $gender . ',' . $physical_description .',' .$relationship_status . ',' .$city .',' .$email . ',' .$password .',' . PHP_EOL;
-        file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);            
+        file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);        
         header("Location: page_connexion.html");     
-      } 
 } 
  ?>
