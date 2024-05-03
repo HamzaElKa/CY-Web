@@ -12,9 +12,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $password = $_POST["password"];
         $passwordConf = $_POST["passwordConf"];
-            $filename = 'utilisateurs.txt';
-            $data = $firstname . ',' .$name . ',' . $birthdate . ',' . $gender . ',' . $physical_description .',' .$relationship_status . ',' .$city .',' .$email . ',' .$password .',' . PHP_EOL;
-            file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);            
-            header("Location: page_connexion.html");     
-      }  } 
+        $filename = 'utilisateurs.txt';
+        $data = $firstname . ',' .$name . ',' . $birthdate . ',' . $gender . ',' . $physical_description .',' .$relationship_status . ',' .$city .',' .$email . ',' .$password .',' . PHP_EOL;
+        file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);            
+        header("Location: page_connexion.html");     
+      } 
+} 
  ?>
