@@ -18,6 +18,7 @@ if(isset($_SESSION['email'])) {
             echo "<p><strong>Email :</strong> ".$user_data[7]."</p>";
             echo "<p><a href='logout.php'>Se déconnecter</a></p>";
             echo "<p><a href='modifier_profil.php'>Modifier le profil</a></p>";
+            echo "<p><a href='dern_prof.html'>Consultation des profiles</a></p>";
             exit();
         }
     }

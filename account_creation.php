@@ -15,4 +15,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);        
         header("Location: page_connexion.html");     
 } 
-?>
+ ?>

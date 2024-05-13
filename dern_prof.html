@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derniers Profils</title>
+</head>
+<body>
+    <h1>Derniers Profils</h1>
+    <div id="profiles"></div>
+    <script>
+        function loadProfiles() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("profiles").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", "get_profiles.php", true);
+            xhttp.send();
+        }
+        window.onload = loadProfiles;
+    </script>
+</body>
+</html>
