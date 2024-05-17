@@ -38,29 +38,20 @@ function chercherEtModifierTxt($nomFichier, $chaineRecherchee, $chaineAjoutee) {
 }
 
 if (isset($_SESSION['email'])) {
-    $prenom = $_SESSION['firstname'];
-    $nom = $_SESSION['name'];
-    $dateNaissance = $_SESSION['birthdate'];
-    $genre = $_SESSION['gender'];
-    $descriptionPhysique = $_SESSION['physical_description'];
-    $statutRelation = $_SESSION['relationship_status'];
-    $ville = $_SESSION['city'];
-    $email = $_SESSION['email'];
-    $motDePasse = $_SESSION['password'];
-    $nouveauNomFichier = $_SESSION['newFileName'];
+    $prenom = $_SESSION['firstname'] ?? '';
+    $nom = $_SESSION['name'] ?? '';
+    $dateNaissance = $_SESSION['birthdate'] ?? '';
+    $genre = $_SESSION['gender'] ?? '';
+    $descriptionPhysique = $_SESSION['physical_description'] ?? '';
+    $statutRelation = $_SESSION['relationship_status'] ?? '';
+    $ville = $_SESSION['city'] ?? '';
+    $email = $_SESSION['email'] ?? '';
+    $motDePasse = $_SESSION['password'] ?? '';
+    $nouveauNomFichier = $_SESSION['newFileName'] ?? '';
     $typeAbonnement = "basique"; // Type d'abonnement récupéré de la session
     $ligne = $prenom . ',' . $nom . ',' . $dateNaissance . ',' . $genre . ',' . $descriptionPhysique . ',' . $statutRelation . ',' . $ville . ',' . $email . ',' . $motDePasse . ',' . $nouveauNomFichier . ',' . $typeAbonnement . PHP_EOL;
     $nomFichierTxt = "utilisateurs.txt"; // Changez ceci avec le nom de votre fichier texte
-    // Ajoute la nouvelle ligne au fichier texte (si nécessaire)
-    /*
-    $fichier = fopen($nomFichierTxt, "a+");
-    if ($fichier) {
-        fwrite($fichier, $ligne);
-        fclose($fichier);
-    } else {
-        echo "Erreur lors de l'ouverture du fichier.";
-    }
-    */
+
     // Cherche et modifie le fichier texte
     $chaineRecherchee = $email; // On suppose que vous cherchez par email
     $chaineAjoutee = $typeAbonnement; // La chaîne que vous souhaitez ajouter
