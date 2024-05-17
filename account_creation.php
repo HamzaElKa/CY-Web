@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
     $passwordConf = $_POST["passwordConf"];
+    $subscriptionType="a";
     if(isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
         $fileName = $_FILES['profile_pic']['name'];
@@ -20,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dest_path = $uploadFileDir . $newFileName;
         if(move_uploaded_file($fileTmpPath, $dest_path)) {
             $filename = 'utilisateurs.txt';
-            $data = $firstname . ',' . $name . ',' . $birthdate . ',' . $gender . ',' . $physical_description . ',' . $relationship_status . ',' . $city . ',' . $email . ',' . $password . ',' . $newFileName . PHP_EOL;
+            $data = $firstname . ',' . $name . ',' . $birthdate . ',' . $gender . ',' . $physical_description . ',' . $relationship_status . ',' . $city . ',' . $email . ',' . $password . ',' . $newFileName . ',' . $subscriptionType. PHP_EOL;
             file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);
             header("Location: page_connexion.html");
         } else {
@@ -31,4 +32,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-

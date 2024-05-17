@@ -70,8 +70,6 @@
 
         .content {
             background-image: url('voiture2.jpg');
-            background-size: cover;
-            background-position: center;
         }
     </style>
 </head>
@@ -80,7 +78,7 @@
         <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
             <form>
-                <a href="dern_prof.html">
+                <a href="dern_prof.php">
                     <button type="button">Consulter les profils</button>
                 </a>
                 <a href="page_profil.php">
@@ -92,8 +90,8 @@
     <div class="content">
         <div class="white-block hero-section">
             <h2>Recherche</h2>
-            <input type="text" id="searchInput" placeholder="*******" style="width: 300px; height: 40px; font-size: 16px;"> <!-- Modification de la taille du champ de recherche -->
-            <button onclick="search()" style="height: 40px; font-size: 16px;">Search</button> <!-- Modification de la taille du bouton -->
+            <input type="text" id="searchInput" placeholder="*******" style="width: 300px; height: 40px; font-size: 16px;"> 
+            <button onclick="search()" style="height: 40px; font-size: 16px;">Search</button> 
             <div id="profiles"></div>
         </div>
     </div>

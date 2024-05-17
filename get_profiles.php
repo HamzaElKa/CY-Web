@@ -39,7 +39,7 @@
         }
 
         .header-buttons {
-            flex: 1; /* Pour pousser les boutons à droite */
+            flex: 1; 
             display: flex;
             justify-content: flex-end;
         }
@@ -47,13 +47,13 @@
         .bhead button {
             background: red;
             color: #fff;
-            padding: 15px 30px; /* Agrandi le bouton */
+            padding: 15px 30px; 
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
-            margin-left: 10px; /* Vous pouvez ajuster ceci pour plus d'espace entre les boutons si nécessaire */
+            margin-left: 10px; 
         }
 
         .bhead button:hover {
@@ -76,7 +76,7 @@
         }
 
         .profile {
-            width: 45%; /* 45% pour deux profils par ligne */
+            width: 45%; 
             padding: 20px;
             background: #fff;
             border-radius: 8px;
@@ -126,12 +126,10 @@
 </head>
 <body>
     <div class="bhead">
-        <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
-            <button onclick="window.location.href='rech_ajax.html'">Retour au moteur de recherche</button>
+            <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
         </div>
     </div>
-
     <?php
     $filename = 'utilisateurs.txt';
     $lines = file($filename, FILE_IGNORE_NEW_LINES);

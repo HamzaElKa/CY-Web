@@ -10,32 +10,32 @@
 <body>
     <a href="index.html" id="lien-accueil">
         <h1>Cardate</h1>
-      </a>
+    </a>
     <header class="headerProfile">
         <h1>Créer un compte</h1>
     </header>
     <div class="containerRegistration">
-      <form method="POST" action="account_creation.php" enctype="multipart/form-data">
+        <form method="POST" action="account_creation.php" enctype="multipart/form-data">
             <label for="firstname">Prénom</label><br>
             <input type="text" name="firstname" maxlength="20" required><br>
             <label for="name">Nom</label><br>
             <input type="text" name="name" maxlength="20" required><br>
             <label for="birthdate">Date de naissance</label><br>
             <input type="date" name="birthdate" required><br>
-          <label for="gender">Sexe :</label><br>
-          <input type="radio" id="male" name="gender" value="homme" required>
-          <label for="male">Homme</label><br>
-          <input type="radio" id="female" name="gender" value="femme" required>
-          <label for="female">Femme</label><br>
-          <label for="physical_description">Description physique :</label><br>
-          <textarea id="physical_description" name="physical_description"></textarea><br>
-          <select id="relationship_status" name="relationship_status">
-              <option value="célibataire">Célibataire</option>
-              <option value="en couple">En couple</option>
-              <option value="marié(e)">Marié(e)</option>
-              <option value="divorcé(e)">Divorcé(e)</option>
-              <option value="veuf/veuve">Veuf/Veuve</option>
-          </select><br>
+            <label for="gender">Sexe :</label><br>
+            <input type="radio" id="male" name="gender" value="homme" required>
+            <label for="male">Homme</label><br>
+            <input type="radio" id="female" name="gender" value="femme" required>
+            <label for="female">Femme</label><br>
+            <label for="physical_description">Description physique :</label><br>
+            <textarea id="physical_description" name="physical_description"></textarea><br>
+            <select id="relationship_status" name="relationship_status">
+                <option value="célibataire">Célibataire</option>
+                <option value="en couple">En couple</option>
+                <option value="marié(e)">Marié(e)</option>
+                <option value="divorcé(e)">Divorcé(e)</option>
+                <option value="veuf/veuve">Veuf/Veuve</option>
+            </select><br>
             <label for="city">Ville</label><br>
             <input type="text" name="city" placeholder="Cergy" maxlength="25" required><br>
             <label for="email">Adresse mail</label><br>
@@ -44,10 +44,29 @@
             <input type="password" name="password" maxlength="20"><br>
             <label for="passwordConf">Confirmation du mot de passe</label><br>
             <input type="password" name="passwordConf" maxlength="20"><br>
-          <label for="profile_pic">Photo de profil</label><br>
-          <input type="file" name="profile_pic" accept="image/*"><br>
+            <label for="profile_pic">Photo de profil</label><br>
+            <input type="file" name="profile_pic" id="profile_pic_input" accept="image/*"><br>
+            <img id="profile_pic_preview" src="#" alt="Prévisualisation de la photo de profil" style="display: none;"><br>
             <button name="submit" type="submit">S'inscrire</button>
         </form>
         <a href="index.html">Revenir à l'accueil</a>
         <a href="page_connexion.html">Déjà membre ? Connectez-vous ici</a>
     </div>
+    <script>
+        function previewProfilePic(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile_pic_preview').style.display = 'block';
+                    document.getElementById('profile_pic_preview').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]); 
+            }
+        }
+        document.getElementById('profile_pic_input').addEventListener('change', function () {
+            previewProfilePic(this);
+        });
+    </script>
+</body>
+</html>

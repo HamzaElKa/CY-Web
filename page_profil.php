@@ -90,7 +90,9 @@ if(isset($_SESSION['email'])) {
                 <h1 class="header-title"><a href="index.html">Cardate</a></h1>
                     <div class="header-buttons">
                         <button onclick="window.location.href='modifier_profil.php'">Modifier le profil</button>
-                        <button onclick="window.location.href='dern_prof.html'">Consulter les profils</button>
+                        <button onclick="window.location.href='dern_prof.php'">Consulter les profils</button>
+                        <button onclick="window.location.href='boite_messagerie.php'">Messagerie</button>
+                        <button onclick="window.location.href='offre_abo.html'">Offres d'abonnement</button>
                     </div>
                 </div>
                 <div class="content">
@@ -112,7 +114,7 @@ if(isset($_SESSION['email'])) {
                             echo "<img class='profile-pic' src='$profile_pic_path_png' alt='Photo de profil'>";
                         } elseif (file_exists($profile_pic_path_jpg)) {
                             echo "<img class='profile-pic' src='$profile_pic_path_jpg' alt='Photo de profil'>";
-                        } else {
+                        }else {
                             echo "<p>Aucune photo de profil trouvée.</p>";
                         }
                         

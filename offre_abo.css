@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.barre-noire {
+    background-color: black;
+    height: 40px; /* Ajustez la hauteur de la barre noire selon vos besoins */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 20px; /* Ajustez la marge à droite pour éviter que les boutons ne touchent le bord */
+}
+
+.barre-noire button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.header-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 20px;
+}
+
+#offres {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 40px); /* Ajustez la hauteur pour compenser la barre noire */
+}
+
+.offre {
+    width: 50%;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.offre h3 {
+    color: red;
+    border-bottom: 2px solid red;
+    padding-bottom: 10px;
+}
+
+.offre p {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.offre button {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.offre button:hover {
+    background-color: darkred;
+}
+
+.content {
+    background-image: url('voiture2.jpg');
+}

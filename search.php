@@ -43,6 +43,5 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
         $results .= "</div>";
     }
 }
-
 echo "<div id='profiles'>" . $results . "</div>";
 ?>
