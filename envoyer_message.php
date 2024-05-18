@@ -9,10 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($recipient) || empty($message)) {
             echo "Veuillez remplir tous les champs.";
         } else {
-            $recipient_file = 'messages_utilisateur_' . $recipient . '.txt';
-            $message_data = $sender . '|' . date('Y-m-d à H:i:s') . '|' . $message . PHP_EOL;
-            if (file_put_contents($recipient_file, $message_data, FILE_APPEND | LOCK_EX) !== false) {
-                header("Location: boite_messagerie.php?=success");
+            $filename = 'messages.txt';
+            $message_data = $sender . '|' . $recipient . '|' . date('Y-m-d H:i:s') . '|' . $message . PHP_EOL;
+            if (file_put_contents($filename, $message_data, FILE_APPEND | LOCK_EX) !== false) {
+                header("Location: boite_messagerie.php?recipient=" . urlencode($recipient) . "&success=1");
+                exit();
             } else {
                 echo "Une erreur s'est produite lors de l'envoi du message.";
             }
@@ -22,6 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 } else {
     header("Location: boite_messagerie.php");
-    exit;
+    exit();
 }
 ?>

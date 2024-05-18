@@ -6,10 +6,12 @@ error_reporting(E_ALL);
 $filename = 'utilisateurs.txt';
 $blocked_file = 'utilisateurs_bloques.txt';
 
+// Vérifier l'existence des fichiers
 if (!file_exists($filename)) {
     die("Le fichier des utilisateurs n'existe pas.");
 }
 if (!file_exists($blocked_file)) {
+    // Si le fichier des utilisateurs bloqués n'existe pas, le créer
     file_put_contents($blocked_file, "");
 }
 
@@ -18,10 +20,10 @@ $lines = file($filename, FILE_IGNORE_NEW_LINES);
 $lines = array_reverse($lines);
 ?>
 <!DOCTYPE html>
-<html lang='fr'>
+<html lang="fr">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Engine</title>
     <style>
         body {
@@ -36,13 +38,16 @@ $lines = array_reverse($lines);
             color: white;
             font-size: 24px;
         }
+
         .header-title a {
             color: white;
             text-decoration: none;
         }
+
         .header-title a:hover {
             text-decoration: underline;
         }
+
         .bhead {
             background: #000;
             padding: 10px 20px;
@@ -50,11 +55,13 @@ $lines = array_reverse($lines);
             justify-content: space-between;
             align-items: center;
         }
+
         .header-buttons {
             flex: 1;
             display: flex;
             justify-content: flex-end;
         }
+
         .bhead button {
             background: red;
             color: #fff;
@@ -66,15 +73,18 @@ $lines = array_reverse($lines);
             transition: background-color 0.3s;
             margin-left: 10px;
         }
+
         .bhead button:hover {
             background-color: #c40000;
         }
+
         h1 {
             text-align: left;
             margin: 20px;
             color: #fff;
             font-size: 36px;
         }
+
         #profiles {
             display: flex;
             flex-wrap: wrap;
@@ -82,6 +92,7 @@ $lines = array_reverse($lines);
             align-items: flex-start;
             padding: 20px;
         }
+
         .profile {
             width: 45%;
             padding: 20px;
@@ -91,6 +102,7 @@ $lines = array_reverse($lines);
             text-align: center;
             margin-bottom: 20px;
         }
+
         .profile img {
             width: 100px;
             height: 100px;
@@ -98,18 +110,21 @@ $lines = array_reverse($lines);
             margin: 0 auto 20px;
             display: block;
         }
+
         .profile h2 {
             font-size: 18px;
             margin-bottom: 10px;
             color: #333;
         }
+
         .profile p {
             color: #666;
             margin: 0;
             line-height: 1.5;
         }
+
         .profile-button {
-            background: blue;
+            background: blue; /* Bouton voir détail en bleu */
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -121,11 +136,13 @@ $lines = array_reverse($lines);
             margin-top: 10px;
             display: inline-block;
         }
+
         .profile-button:hover {
             background-color: #0000c4;
         }
+
         .block-button {
-            background: red;
+            background: red; /* Bouton bloquer en rouge */
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -137,9 +154,11 @@ $lines = array_reverse($lines);
             margin-top: 10px;
             display: inline-block;
         }
+
         .block-button:hover {
             background-color: #c40000;
         }
+
         .blocked-users-btn {
             position: fixed;
             bottom: 20px;
@@ -153,8 +172,36 @@ $lines = array_reverse($lines);
             font-size: 16px;
             transition: background-color 0.3s;
         }
+
         .blocked-users-btn:hover {
             background-color: #0000c4;
+        }
+
+        #blockedUsersModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #blockedUsersModal .close-btn {
+            background: red;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+        }
+
+        #blockedUsersModal .close-btn:hover {
+            background-color: #c40000;
         }
     </style>
     <script>
@@ -170,7 +217,16 @@ $lines = array_reverse($lines);
                     alert("Erreur lors du blocage de l'utilisateur.");
                 }
             };
-            xhttp.send("user_id=" + encodeURIComponent(userId));
+            xhttp.send("user_id=" + userId);
+        }
+
+        function showBlockedUsers() {
+            window.location.href = 'get_blocked_users.php';
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('blockedUsersModal');
+            modal.style.display = 'none';
         }
     </script>
 </head>

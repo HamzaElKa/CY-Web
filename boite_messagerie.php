@@ -1,8 +1,15 @@
 <?php
 session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: page_connexion.html");
+    exit();
+}
+
+$recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
+
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,123 +51,165 @@ session_start();
         .content {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding: 20px;
             height: 100vh;
+            background-color: #e5ddd5;
             background-image: url('voiture2.jpg');
         }
-        .white-block {
+        .user-list {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 800px;
+            max-width: 250px;
             width: 100%;
-            margin: 20px;
+            margin-right: 20px;
         }
-        .hero-section h2 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 10px;
+        .user-list ul {
+            list-style: none;
+            padding: 0;
         }
-        .hero-section h3 {
-            font-size: 18px;
-            color: #666;
-            margin-top: 0;
+        .user-list li {
+            margin: 10px 0;
         }
-        .profile-pic {
-            max-width: 200px;
-            height: auto;
-            margin-top: 20px;
+        .user-list a {
+            text-decoration: none;
+            color: #007bff;
         }
-        .page-title {
-            background-color: red;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: 0;
+        .user-list a:hover {
+            text-decoration: underline;
+        }
+        .chat-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .messages {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
         }
         .message {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin: 10px 0;
         }
-        .message:last-child {
-            border-bottom: none;
+        .message.sent {
+            text-align: right;
+        }
+        .message.received {
+            text-align: left;
         }
         .message p {
-            margin: 5px 0;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0;
         }
-        .message button {
-            background-color: #007BFF;
+        .message.sent p {
+            background-color: #dcf8c6;
+        }
+        .message.received p {
+            background-color: #fff;
+        }
+        .message-input {
+            display: flex;
+            padding: 10px;
+        }
+        .message-input input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .message-input button {
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            margin-left: 10px;
         }
-        .message button:hover {
+        .message-input button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="bhead">
-    <h1 class="header-title"><a href="index.html">Cardate</a></h1>
+        <h1 class="header-title"><a href="index.html" style="color: white; text-decoration: none;">Cardate</a></h1>
         <div class="header-buttons">
-            <button onclick="window.location.href='envoyer_mess.php'">Envoyer un message</button>
             <button onclick="window.location.href='page_profil.php'">Mon profil</button>
+            <button onclick="window.location.href='logout.php'">Se déconnecter</button>
         </div>
     </div>
     <div class="content">
-        <div class="white-block">
-            <h1 class="page-title">Messages reçus</h1>
-            <?php
-            if (isset($_SESSION['email'])) {
+        <div class="user-list">
+            <h2>Utilisateurs</h2>
+            <ul>
+                <?php
                 $filename = 'utilisateurs.txt';
-                $users = file($filename, FILE_IGNORE_NEW_LINES);
-                $user_id = null;
-
-                foreach ($users as $user) {
-                    $user_data = explode(',', $user);
-                    if ($user_data[7] == $_SESSION['email']) {
-                        $user_id = $user_data[7]; // Utilisez l'index correct pour l'ID utilisateur
-                        break;
+                if (file_exists($filename)) {
+                    $users = file($filename, FILE_IGNORE_NEW_LINES);
+                    foreach ($users as $user) {
+                        $user_data = explode(',', $user);
+                        if ($user_data[7] !== $_SESSION['email']) { // N'affiche pas l'utilisateur connecté
+                            echo '<li><a href="boite_messagerie.php?recipient=' . urlencode($user_data[7]) . '">' . htmlspecialchars($user_data[0]) . ' ' . htmlspecialchars($user_data[1]) . '</a></li>';
+                        }
                     }
+                } else {
+                    echo '<li>Aucun utilisateur trouvé.</li>';
                 }
+                ?>
+            </ul>
+        </div>
+        <div class="chat-container">
+            <div class="messages">
+                <?php
+                if ($recipient) {
+                    $filename = 'messages.txt';
+                    if (file_exists($filename)) {
+                        $messages = file($filename, FILE_IGNORE_NEW_LINES);
+                        foreach ($messages as $message) {
+                            $message_data = explode('|', $message);
+                            if (count($message_data) === 4) {
+                                $sender = htmlspecialchars($message_data[0]);
+                                $recipient_in_message = htmlspecialchars($message_data[1]);
+                                $timestamp = htmlspecialchars($message_data[2]);
+                                $content = htmlspecialchars($message_data[3]);
 
-                if ($user_id !== null) {
-                    $messages_file = 'messages_utilisateur_' . $user_id . '.txt';
-                    if (file_exists($messages_file)) {
-                        $messages = file($messages_file, FILE_IGNORE_NEW_LINES);
-
-                        if (!empty($messages)) {
-                            foreach ($messages as $message) {
-                                $message_data = explode('|', $message);
-                                echo '<div class="message">';
-                                echo '<div>';
-                                echo '<p><strong>De:</strong> ' . htmlspecialchars($message_data[0]) . '</p>';
-                                echo '<p><strong>Date:</strong> ' . htmlspecialchars($message_data[1]) . '</p>';
-                                echo '<p><strong>Message:</strong> ' . htmlspecialchars($message_data[2]) . '</p>';
-                                echo '</div>';
-                                echo '<button onclick="window.location.href=\'envoyer_mess.php?recipient=' . urlencode($message_data[0]) . '\'">Répondre</button>';
-                                echo '</div>';
+                                if (($sender === $_SESSION['email'] && $recipient_in_message === $recipient) ||
+                                    ($sender === $recipient && $recipient_in_message === $_SESSION['email'])) {
+                                    $message_class = ($sender === $_SESSION['email']) ? 'sent' : 'received';
+                                    echo '<div class="message ' . $message_class . '">';
+                                    echo '<p>' . $content . '<br><small>' . $timestamp . '</small></p>';
+                                    echo '</div>';
+                                }
                             }
-                        } else {
-                            echo '<p>Aucun message trouvé.</p>';
                         }
                     } else {
                         echo '<p>Aucun message trouvé.</p>';
                     }
                 } else {
-                    echo '<p>Utilisateur non trouvé.</p>';
+                    echo '<p>Veuillez sélectionner un destinataire pour voir les messages.</p>';
                 }
-            } else {
-                echo '<p>Vous devez être connecté pour voir vos messages.</p>';
-            }
-            ?>
+                ?>
+            </div>
+            <?php if ($recipient): ?>
+            <form class="message-input" action="envoyer_message.php" method="post">
+                <input type="hidden" name="recipient" value="<?php echo htmlspecialchars($recipient); ?>">
+                <input type="text" name="message" placeholder="Tapez votre message" required>
+                <button type="submit">Envoyer</button>
+            </form>
+            <?php endif; ?>
         </div>
     </div>
 </body>
