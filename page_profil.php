@@ -55,9 +55,7 @@ if (isset($_SESSION['email'])) {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        height: calc(100vh - 50px);
                         background-image: url('voiture2.jpg');
-                        padding-top: 70px; /* Height of the header */
                     }
                     .white-block {
                         background-color: white;
