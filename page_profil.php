@@ -6,9 +6,10 @@ if (isset($_SESSION['email'])) {
     foreach ($users as $user) {
         $user_data = explode(',', $user);
         if ($user_data[7] == $_SESSION['email']) {
-            ?>
+?>
             <!DOCTYPE html>
             <html lang="fr">
+
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +21,7 @@ if (isset($_SESSION['email'])) {
                         padding: 0;
                         background-color: #f2f2f2;
                     }
+
                     .bhead {
                         background-color: black;
                         padding: 10px 20px;
@@ -31,13 +33,16 @@ if (isset($_SESSION['email'])) {
                         top: 0;
                         z-index: 1000;
                     }
+
                     .header-title {
                         color: white;
                         margin: 0;
                     }
+
                     .header-buttons {
                         display: flex;
                     }
+
                     .bhead button {
                         background-color: red;
                         color: white;
@@ -48,15 +53,18 @@ if (isset($_SESSION['email'])) {
                         font-size: 16px;
                         margin-left: 10px;
                     }
+
                     .bhead button:hover {
                         background-color: darkred;
                     }
+
                     .content {
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         background-image: url('voiture2.jpg');
                     }
+
                     .white-block {
                         background-color: white;
                         padding: 20px;
@@ -66,21 +74,25 @@ if (isset($_SESSION['email'])) {
                         max-width: 90%;
                         margin: auto;
                     }
+
                     .hero-section h2 {
                         font-size: 24px;
                         color: #333;
                         margin-bottom: 10px;
                     }
+
                     .hero-section h3 {
                         font-size: 18px;
                         color: #666;
                         margin-top: 0;
                     }
+
                     .profile-pic {
                         max-width: 200px;
                         height: auto;
                         margin-top: 20px;
                     }
+
                     .page-title {
                         background-color: red;
                         color: white;
@@ -90,6 +102,7 @@ if (isset($_SESSION['email'])) {
                     }
                 </style>
             </head>
+
             <body>
                 <div class="bhead">
                     <h1 class="header-title"><a href="index.html" style="color: white; text-decoration: none;">Cardate</a></h1>
@@ -98,6 +111,11 @@ if (isset($_SESSION['email'])) {
                         <button onclick="window.location.href='dern_prof.php'">Consulter les profils</button>
                         <button onclick="window.location.href='boite_messagerie.php'">Messagerie</button>
                         <button onclick="window.location.href='offre_abo.html'">Offres d'abonnement</button>
+                        <?php
+                        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']) {
+                            echo '<button onclick="window.location.href=\'admin_dashboard.php\'">Admin</button>';
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="content">
@@ -113,8 +131,8 @@ if (isset($_SESSION['email'])) {
                         <p><strong>Ville :</strong> <?php echo $user_data[6]; ?></p>
                         <p><strong>Email :</strong> <?php echo $user_data[7]; ?></p>
                         <?php
-                        $profile_pic_path_png = 'images/' . $user_data[7] . '.png';
-                        $profile_pic_path_jpg = 'images/' . $user_data[7] . '.jpg';
+                        $profile_pic_path_png = 'images/' . $user_data[9];
+                        $profile_pic_path_jpg = 'images/' . $user_data[9];
                         if (file_exists($profile_pic_path_png)) {
                             echo "<img class='profile-pic' src='$profile_pic_path_png' alt='Photo de profil'>";
                         } elseif (file_exists($profile_pic_path_jpg)) {
@@ -127,8 +145,9 @@ if (isset($_SESSION['email'])) {
                     </div>
                 </div>
             </body>
+
             </html>
-            <?php
+<?php
             exit();
         }
     }

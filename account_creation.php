@@ -11,19 +11,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
     $passwordConf = $_POST["passwordConf"];
+    $adminstatut = 0;
     $subscriptionType = "a";
     $profilePic = $_FILES['profile_pic'];
     $birthDate = new DateTime($birthdate);
     $today = new DateTime();
     $age = $today->diff($birthDate)->y;
+
     if ($age < 18) {
         die("Vous devez avoir au moins 18 ans pour vous inscrire.");
     }
+
     if ($password !== $passwordConf) {
         die("Les mots de passe ne correspondent pas.");
     }
+
     $filename = 'utilisateurs.txt';
+    $bannedFile = 'bannissements.txt';
     $emailExists = false;
+
+    // Check if email is banned
+    if (file_exists($bannedFile)) {
+        $bannedEmails = file($bannedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (in_array($email, $bannedEmails)) {
+            die("Erreur : Cette adresse email a été bannie.");
+        }
+    }
 
     if (file_exists($filename)) {
         $users = file($filename, FILE_IGNORE_NEW_LINES);
@@ -35,9 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
+
     if ($emailExists) {
         die("Cette adresse email est déjà utilisée.");
     }
+
     if (isset($profilePic) && $profilePic['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $profilePic['tmp_name'];
         $fileName = $profilePic['name'];
@@ -46,8 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newFileName = $email . '.' . $fileExtension;
         $uploadFileDir = 'images/';
         $dest_path = $uploadFileDir . $newFileName;
+
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
-            $data = $firstname . ',' . $name . ',' . $birthdate . ',' . $gender . ',' . $physical_description . ',' . $relationship_status . ',' . $city . ',' . $email . ',' . $password . ',' . $newFileName . ',' . $subscriptionType . PHP_EOL;
+            $data = $firstname . ',' . $name . ',' . $birthdate . ',' . $gender . ',' . $physical_description . ',' . $relationship_status . ',' . $city . ',' . $email . ',' . $password . ',' . $newFileName . ',' . $adminstatut . ',' . $subscriptionType . PHP_EOL;
             file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);
             header("Location: page_connexion.html");
             exit();
@@ -58,4 +74,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Erreur: Aucun fichier téléchargé ou une erreur s'est produite lors du téléchargement.";
     }
 }
-?>
