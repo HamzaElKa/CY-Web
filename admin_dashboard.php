@@ -11,6 +11,24 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
 <head>
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .header-buttons button, .content .white-block button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+       
+        .content h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,6 +38,7 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
         </a>
         <div class="header-buttons">
             <a href="logout.php"><button type="button">Déconnexion</button></a>
+            <a href="page_profil.php"><button type="button">Profil</button></a>
         </div>
     </div>
     <div class="content">

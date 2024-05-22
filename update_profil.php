@@ -6,8 +6,6 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $users = file($filename, FILE_IGNORE_NEW_LINES);
     $emailExists = false;
     $currentEmail = $_SESSION['email'];
-
-    // Récupération des données du formulaire
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $birthdate = $_POST['birthdate'];
@@ -16,8 +14,6 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $relationship_status = $_POST['relationship_status'];
     $city = $_POST['city'];
     $email = $_POST['email'];
-
-    // Vérification de l'unicité de l'email
     foreach ($users as $user) {
         $user_data = explode(',', $user);
         if ($user_data[7] == $email && $email != $currentEmail) {
@@ -30,7 +26,6 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         die("Cette adresse email est déjà utilisée.");
     }
 
-    // Vérification de l'âge
     try {
         $birthDate = new DateTime($birthdate);
         $today = new DateTime();
@@ -43,7 +38,6 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         die("Vous devez avoir au moins 18 ans pour modifier votre profil.");
     }
 
-    // Mise à jour des informations dans le fichier
     for ($i = 0; $i < count($users); $i++) {
         $user_data = explode(',', $users[$i]);
         if ($user_data[7] == $currentEmail) {
@@ -74,7 +68,7 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
             $users[$i] = implode(',', $user_data);
             file_put_contents($filename, implode(PHP_EOL, $users));
-            $_SESSION['email'] = $email; // Mettre à jour l'email dans la session
+            $_SESSION['email'] = $email; 
             header("Location: page_profil.php?update=success");
             exit();
         }

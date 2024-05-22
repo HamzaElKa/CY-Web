@@ -54,43 +54,105 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_report'])) {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f2f2f2;
+            background: url('voiture2.jpg') repeat;
+        }
+
+        .header-title {
+            margin: 0;
+            padding: 0;
+            color: white;
+            font-size: 24px;
+        }
+
+        .header-title a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .header-title a:hover {
+            text-decoration: underline;
+        }
+
+        .bhead {
+            background: #000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-buttons {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .bhead button {
+            background: red;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+
+        .bhead button:hover {
+            background-color: #c40000;
+        }
+
+        h1, h2 {
+            text-align: left;
+            margin: 20px;
+            color: white;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px #000000;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        table,
-        th,
-        td {
+        table, th, td {
             border: 1px solid black;
         }
 
-        th,
-        td {
+        th, td {
             padding: 10px;
             text-align: left;
         }
 
-        button {
+        button, .button-red {
             padding: 10px 20px;
             background-color: red;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        button:hover {
+        button:hover, .button-red:hover {
             background-color: darkred;
         }
     </style>
 </head>
 
 <body>
+    <div class="bhead">
+        <h1 class="header-title"><a href="index.html">Cardate</a></h1>
+        <div class="header-buttons">
+            <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
+        </div>
+    </div>
     <h1>Signalements de messages</h1>
     <table>
         <thead>

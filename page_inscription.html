@@ -15,7 +15,7 @@
         <h1>Créer un compte</h1>
     </header>
     <div class="containerRegistration">
-        <form method="POST" action="account_creation.php" enctype="multipart/form-data">
+        <form method="POST" action="account_creation.php" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label for="firstname">Prénom</label><br>
             <input type="text" name="firstname" maxlength="20" required><br>
             <label for="name">Nom</label><br>
@@ -39,11 +39,11 @@
             <label for="city">Ville</label><br>
             <input type="text" name="city" placeholder="Cergy" maxlength="25" required><br>
             <label for="email">Adresse mail</label><br>
-            <input type="email" name="email"><br>
+            <input type="email" name="email" required><br>
             <label for="password">Mot de Passe</label><br>
-            <input type="password" name="password" maxlength="20"><br>
+            <input type="password" name="password" maxlength="20" required><br>
             <label for="passwordConf">Confirmation du mot de passe</label><br>
-            <input type="password" name="passwordConf" maxlength="20"><br>
+            <input type="password" name="passwordConf" maxlength="20" required><br>
             <label for="profile_pic">Photo de profil</label><br>
             <input type="file" name="profile_pic" id="profile_pic_input" accept="image/*"><br>
             <img id="profile_pic_preview" src="#" alt="Prévisualisation de la photo de profil" style="display: none;"><br>
@@ -53,6 +53,42 @@
         <a href="page_connexion.html">Déjà membre ? Connectez-vous ici</a>
     </div>
     <script>
+        function validateForm() {
+            var birthdate = document.querySelector('input[name="birthdate"]').value;
+            var birthdateDate = new Date(birthdate);
+            var today = new Date();
+            var age = today.getFullYear() - birthdateDate.getFullYear();
+            var m = today.getMonth() - birthdateDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthdateDate.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                alert("Vous devez avoir au moins 18 ans pour vous inscrire.");
+                return false;
+            }
+
+            var email = document.querySelector('input[name="email"]').value;
+            if (!validateEmail(email)) {
+                alert("L'adresse e-mail n'est pas valide.");
+                return false;
+            }
+
+            var password = document.querySelector('input[name="password"]').value;
+            var passwordConf = document.querySelector('input[name="passwordConf"]').value;
+            if (password !== passwordConf) {
+                alert("Les mots de passe ne correspondent pas.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
         function previewProfilePic(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -61,7 +97,7 @@
                     document.getElementById('profile_pic_preview').src = e.target.result;
                 }
 
-                reader.readAsDataURL(input.files[0]); 
+                reader.readAsDataURL(input.files[0]);
             }
         }
         document.getElementById('profile_pic_input').addEventListener('change', function () {

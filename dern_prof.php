@@ -2,22 +2,27 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+session_start();
 $filename = 'utilisateurs.txt';
 $blocked_file = 'utilisateurs_bloques.txt';
-
-// Vérifier l'existence des fichiers
 if (!file_exists($filename)) {
     die("Le fichier des utilisateurs n'existe pas.");
 }
 if (!file_exists($blocked_file)) {
-    // Si le fichier des utilisateurs bloqués n'existe pas, le créer
     file_put_contents($blocked_file, "");
 }
-
 $blocked_users = file($blocked_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 $lines = file($filename, FILE_IGNORE_NEW_LINES);
 $lines = array_reverse($lines);
+$user_email = $_SESSION['email'];
+$current_user_subscription = 'basique'; 
+foreach ($lines as $line) {
+    $user_data = explode(',', $line);
+    if ($user_data[7] == $user_email) {
+        $current_user_subscription = $user_data[11];
+        break;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -124,7 +129,7 @@ $lines = array_reverse($lines);
         }
 
         .profile-button {
-            background: blue; /* Bouton voir détail en bleu */
+            background: blue; 
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -142,7 +147,7 @@ $lines = array_reverse($lines);
         }
 
         .block-button {
-            background: red; /* Bouton bloquer en rouge */
+            background: red; 
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -243,7 +248,7 @@ $lines = array_reverse($lines);
         foreach ($lines as $line) {
             $user_data = explode(',', $line);
             $user_id = $user_data[7];
-            if (in_array($user_id, $blocked_users)) {
+            if ($user_id == $user_email || in_array($user_id, $blocked_users)) {
                 continue;
             }
             echo "<div class='profile'>";
@@ -258,7 +263,7 @@ $lines = array_reverse($lines);
             echo "<button class='block-button' onclick='blockUser(\"" . htmlspecialchars($user_id) . "\")'>Bloquer</button>";
             echo "</div>";
             $count++;
-            if ($count >= 10) {
+            if (($current_user_subscription == 'basique' ||$current_user_subscription == 'a') && $count >= 10) {
                 break;
             }
         }
