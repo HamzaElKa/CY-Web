@@ -82,12 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_report'])) {
         }
 
         .header-buttons {
-            flex: 1;
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
         }
 
-        .bhead button {
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .bhead button, .header-buttons a {
             background: red;
             color: #fff;
             padding: 15px 30px;
@@ -96,11 +101,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_report'])) {
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
-            margin-left: 10px;
+            text-decoration: none;
         }
 
-        .bhead button:hover {
+        .bhead button:hover, .header-buttons a:hover {
             background-color: #c40000;
+        }
+
+        .centered-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .centered-button button {
+            padding: 20px 40px;
+            font-size: 18px;
         }
 
         h1, h2 {
@@ -150,8 +166,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_report'])) {
     <div class="bhead">
         <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
-            <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
+            <div class="button-group">
+                <a href="admin_dashboard.php">Dashboard</a>
+                <a href="page_profil.php">Profil</a>
+            </div>
         </div>
+    </div>
+    <div class="centered-button">
+        <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
     </div>
     <h1>Signalements de messages</h1>
     <table>

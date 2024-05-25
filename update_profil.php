@@ -14,6 +14,7 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $relationship_status = $_POST['relationship_status'];
     $city = $_POST['city'];
     $email = $_POST['email'];
+    $password = $_POST['password'];
     foreach ($users as $user) {
         $user_data = explode(',', $user);
         if ($user_data[7] == $email && $email != $currentEmail) {
@@ -49,6 +50,7 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
             $user_data[5] = $relationship_status;
             $user_data[6] = $city;
             $user_data[7] = $email;
+            $user_data[8] = $password;
 
             if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
@@ -59,7 +61,7 @@ if (isset($_SESSION['email']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 $uploadFileDir = 'images/';
                 $dest_path = $uploadFileDir . $newFileName;
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    $user_data[8] = $newFileName;
+                    $user_data[9] = $newFileName;
                 } else {
                     echo "Une erreur s'est produite lors du téléchargement de votre photo de profil.";
                     exit();

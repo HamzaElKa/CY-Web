@@ -17,27 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $birthDate = new DateTime($birthdate);
     $today = new DateTime();
     $age = $today->diff($birthDate)->y;
-
     if ($age < 18) {
         die("Vous devez avoir au moins 18 ans pour vous inscrire.");
     }
-
     if ($password !== $passwordConf) {
         die("Les mots de passe ne correspondent pas.");
     }
-
     $filename = 'utilisateurs.txt';
     $bannedFile = 'bannissements.txt';
     $emailExists = false;
-
-    // Check if email is banned
     if (file_exists($bannedFile)) {
         $bannedEmails = file($bannedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if (in_array($email, $bannedEmails)) {
             die("Erreur : Cette adresse email a été bannie.");
         }
     }
-
     if (file_exists($filename)) {
         $users = file($filename, FILE_IGNORE_NEW_LINES);
         foreach ($users as $user) {
@@ -48,11 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
-
     if ($emailExists) {
         die("Cette adresse email est déjà utilisée.");
     }
-
     if (isset($profilePic) && $profilePic['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $profilePic['tmp_name'];
         $fileName = $profilePic['name'];

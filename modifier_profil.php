@@ -166,7 +166,7 @@ if (isset($_SESSION['email'])) {
         <label for="male">Homme</label><br>
         <input type="radio" id="female" name="gender" value="femme" <?php echo ($user_data[3] == 'femme') ? 'checked' : ''; ?> required>
         <label for="female">Femme</label><br>
-        <label for="physical_description">Description physique :</label>
+        <label for="physical_description">Interêt en voitures :</label>
         <textarea id="physical_description" name="physical_description"><?php echo $user_data[4]; ?></textarea><br>
         <label for="relationship_status">Statut relationnel :</label>
         <select id="relationship_status" name="relationship_status">
@@ -183,6 +183,8 @@ if (isset($_SESSION['email'])) {
         <label for="profile_pic">Photo de profil :</label>
         <input type="file" name="profile_pic" id="profile_pic_input" accept="image/*"><br>
         <img id="profile_pic_preview" src="#" alt="Prévisualisation de la photo de profil" style="display: none;"><br>
+        <label for="password">Mot de passe :</label>
+        <input type="text" name="password" value="<?php echo $user_data[8]; ?>" required><br>
         <button type="submit">Enregistrer les modifications</button>
     </form>
 </body>

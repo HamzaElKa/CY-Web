@@ -6,6 +6,53 @@ if (!isset($_SESSION['email'])) {
 }
 
 $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
+$recipient_name = '';
+
+if ($recipient) {
+    $filename = 'utilisateurs.txt';
+    if (file_exists($filename)) {
+        $users = file($filename, FILE_IGNORE_NEW_LINES);
+        foreach ($users as $user) {
+            $user_data = explode(',', $user);
+            if ($user_data[7] === $recipient) {
+                $recipient_name = htmlspecialchars($user_data[0] . ' ' . $user_data[1]);
+                break;
+            }
+        }
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !isset($_POST['delete'])) {
+    $message = trim($_POST['message']);
+    if ($message !== '' && $recipient) {
+        $filename = 'messages.txt';
+        $sender = $_SESSION['email'];
+        $timestamp = date('Y-m-d H:i:s');
+        $message_line = $sender . '|' . $recipient . '|' . $timestamp . '|' . $message;
+        file_put_contents($filename, $message_line . PHP_EOL, FILE_APPEND);
+        header("Location: boite_messagerie.php?recipient=" . urlencode($recipient));
+        exit();
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    $timestamp_to_delete = $_POST['delete'];
+    $filename = 'messages.txt';
+    if (file_exists($filename)) {
+        $messages = file($filename, FILE_IGNORE_NEW_LINES);
+        $updated_messages = [];
+        foreach ($messages as $message) {
+            $message_data = explode('|', $message);
+            if (count($message_data) === 4) {
+                $timestamp = $message_data[2];
+                if ($timestamp !== $timestamp_to_delete) {
+                    $updated_messages[] = $message;
+                }
+            }
+        }
+        file_put_contents($filename, implode("\n", $updated_messages));
+        header("Location: boite_messagerie.php?recipient=" . urlencode($recipient));
+        exit();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,6 +67,8 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
             margin: 0;
             padding: 0;
             background-color: #f2f2f2;
+            background-image: url('voiture2.jpg');
+            background-repeat: repeat;
         }
 
         .bhead {
@@ -60,8 +109,6 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
             align-items: flex-start;
             padding: 20px;
             height: 100vh;
-            background-color: #e5ddd5;
-            background-image: url('voiture2.jpg');
         }
 
         .user-list {
@@ -80,7 +127,16 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
         }
 
         .user-list li {
+            display: flex;
+            align-items: center;
             margin: 10px 0;
+        }
+
+        .user-list img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
         .user-list a {
@@ -105,6 +161,24 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
             justify-content: space-between;
         }
 
+        .chat-header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .chat-header a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .chat-header a:hover {
+            text-decoration: underline;
+        }
+
         .messages {
             overflow-y: auto;
             flex-grow: 1;
@@ -118,6 +192,8 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
 
         .message.sent {
             text-align: right;
+            display: flex;
+            justify-content: flex-end;
         }
 
         .message.received {
@@ -137,6 +213,21 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
 
         .message.received p {
             background-color: #fff;
+        }
+
+        .message .delete-button {
+            margin-left: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        .message .delete-button:hover {
+            background-color: darkred;
         }
 
         .message-input {
@@ -174,7 +265,6 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0, 0, 0);
             background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
@@ -221,8 +311,12 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
                     $users = file($filename, FILE_IGNORE_NEW_LINES);
                     foreach ($users as $user) {
                         $user_data = explode(',', $user);
-                        if ($user_data[7] !== $_SESSION['email']) { // N'affiche pas l'utilisateur connecté
-                            echo '<li><a href="boite_messagerie.php?recipient=' . urlencode($user_data[7]) . '">' . htmlspecialchars($user_data[0]) . ' ' . htmlspecialchars($user_data[1]) . '</a></li>';
+                        if ($user_data[7] !== $_SESSION['email']) { 
+                            $profile_pic = 'images/' . $user_data[9];
+                            if (!file_exists($profile_pic)) {
+                                $profile_pic = 'images/default.jpg'; 
+                            }
+                            echo '<li><img src="' . htmlspecialchars($profile_pic) . '" alt="Photo de profil"><a href="boite_messagerie.php?recipient=' . urlencode($user_data[7]) . '">' . htmlspecialchars($user_data[0]) . ' ' . htmlspecialchars($user_data[1]) . '</a></li>';
                         }
                     }
                 } else {
@@ -232,6 +326,11 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
             </ul>
         </div>
         <div class="chat-container">
+            <?php if ($recipient) : ?>
+                <div class="chat-header">
+                    <a href="detail.php?user_id=<?php echo urlencode($recipient); ?>"><?php echo $recipient_name; ?></a>
+                </div>
+            <?php endif; ?>
             <div class="messages">
                 <?php
                 if ($recipient) {
@@ -252,6 +351,9 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
                                     $message_class = ($sender === $_SESSION['email']) ? 'sent' : 'received';
                                     echo '<div class="message ' . $message_class . '">';
                                     echo '<p>' . $content . '<br><small>' . $timestamp . '</small></p>';
+                                    if ($sender === $_SESSION['email']) {
+                                        echo '<form method="post" action="boite_messagerie.php?recipient=' . urlencode($recipient) . '" style="display:inline;"><button type="submit" name="delete" value="' . $timestamp . '" class="delete-button">Supprimer</button></form>';
+                                    }
                                     echo '<button onclick="openModal(\'' . addslashes($sender) . '\', \'' . addslashes($recipient_in_message) . '\', \'' . addslashes($timestamp) . '\', \'' . addslashes($content) . '\')">Signaler</button>';
                                     echo '</div>';
                                 }
@@ -266,7 +368,7 @@ $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
                 ?>
             </div>
             <?php if ($recipient) : ?>
-                <form class="message-input" action="envoyer_message.php" method="post">
+                <form class="message-input" action="boite_messagerie.php?recipient=<?php echo urlencode($recipient); ?>" method="post">
                     <input type="hidden" name="recipient" value="<?php echo htmlspecialchars($recipient); ?>">
                     <input type="text" name="message" placeholder="Tapez votre message" required>
                     <button type="submit">Envoyer</button>

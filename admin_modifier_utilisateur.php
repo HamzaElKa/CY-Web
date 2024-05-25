@@ -1,9 +1,7 @@
 <?php
-// admin_modifier_utilisateur.php
 $usersFile = 'utilisateurs.txt';
 $email = $_GET['email'];
 $updated = false;
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newData = implode('|', [
         $_POST['email'],
@@ -15,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_POST['relationship_status'],
         $_POST['city']
     ]);
-
     $users = file($usersFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($users as &$user) {
         list($userEmail) = explode('|', $user);
@@ -25,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         }
     }
-
     if ($updated) {
         file_put_contents($usersFile, implode(PHP_EOL, $users) . PHP_EOL);
         echo "Utilisateur mis à jour avec succès.";

@@ -21,6 +21,8 @@ if (isset($_SESSION['email'])) {
             margin: 0;
             padding: 0;
             background-color: #f2f2f2;
+            background-image: url('voiture2.jpg');
+            background-repeat: repeat;
         }
 
         .bhead {
@@ -63,7 +65,7 @@ if (isset($_SESSION['email'])) {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('voiture2.jpg');
+            padding-top: 60px; 
         }
 
         .white-block {
@@ -103,7 +105,6 @@ if (isset($_SESSION['email'])) {
         }
     </style>
 </head>
-
 <body>
     <div class="bhead">
         <h1 class="header-title"><a href="index.html" style="color: white; text-decoration: none;">Cardate</a></h1>
@@ -112,6 +113,7 @@ if (isset($_SESSION['email'])) {
             <button onclick="window.location.href='dern_prof.php'">Consulter les profils</button>
             <?php if ($abonnement == 'premium' || $abonnement == 'essai') { ?>
                 <button onclick="window.location.href='boite_messagerie.php'">Messagerie</button>
+                <button onclick="window.location.href='visites.php'">Visites</button>
             <?php } ?>
             <button onclick="window.location.href='offre_abo.html'">Offres d'abonnement</button>
             <?php
@@ -129,7 +131,7 @@ if (isset($_SESSION['email'])) {
             <p><strong>Nom :</strong> <?php echo $user_data[1]; ?></p>
             <p><strong>Date de naissance :</strong> <?php echo $user_data[2]; ?></p>
             <p><strong>Sexe :</strong> <?php echo $user_data[3]; ?></p>
-            <p><strong>Description physique :</strong> <?php echo $user_data[4]; ?></p>
+            <p><strong>Interêt en voitures :</strong> <?php echo $user_data[4]; ?></p>
             <p><strong>Statut relationnel :</strong> <?php echo $user_data[5]; ?></p>
             <p><strong>Ville :</strong> <?php echo $user_data[6]; ?></p>
             <p><strong>Email :</strong> <?php echo $user_data[7]; ?></p>
@@ -148,7 +150,6 @@ if (isset($_SESSION['email'])) {
         </div>
     </div>
 </body>
-
 </html>
 <?php
             exit();

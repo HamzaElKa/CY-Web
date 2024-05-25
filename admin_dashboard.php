@@ -20,13 +20,33 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
             cursor: pointer;
             font-size: 16px;
         }
-       
-        .content h2 {
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh; /* Adjust the height as needed */
+        }
+
+        .white-block {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .white-block h2 {
             font-size: 32px;
             font-weight: bold;
             color: #333;
-            text-align: center;
             margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Adjust the gap as needed */
         }
     </style>
 </head>
@@ -44,11 +64,14 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
     <div class="content">
         <div class="white-block">
             <h2>Admin Dashboard</h2>
-            <a href="admin_utilisateurs.php"><button type="button">Gérer les utilisateurs</button></a>
-            <a href="admin_messagerie.php"><button type="button">Voir les messages</button></a>
-            <a href="admin_signalements.php"><button type="button">Gérer les messages signalés</button></a>
+            <div class="button-group">
+                <a href="admin_utilisateurs.php"><button type="button">Gérer les utilisateurs</button></a>
+                <a href="admin_messagerie.php"><button type="button">Voir les messages</button></a>
+                <a href="admin_signalements.php"><button type="button">Gérer les messages signalés</button></a>
+            </div>
         </div>
     </div>
 </body>
 
 </html>
+

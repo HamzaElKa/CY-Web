@@ -1,10 +1,25 @@
 <?php
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if (!isset($_SESSION['email'])) {
+    die("Utilisateur non connecté.");
+}
+
+$user_email = $_SESSION['email'];
 $blocked_file = 'utilisateurs_bloques.txt';
-$blocked_users = file($blocked_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$blocked_users = [];
+
+// Lire les utilisateurs bloqués par l'utilisateur connecté
+$blocked_lines = file($blocked_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+foreach ($blocked_lines as $line) {
+    list($blocker, $blocked) = explode(',', $line);
+    if ($blocker == $user_email) {
+        $blocked_users[] = $blocked;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

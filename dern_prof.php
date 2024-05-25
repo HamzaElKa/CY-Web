@@ -3,25 +3,56 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
+
 $filename = 'utilisateurs.txt';
 $blocked_file = 'utilisateurs_bloques.txt';
+$visits_file = 'visites.txt';
+
 if (!file_exists($filename)) {
     die("Le fichier des utilisateurs n'existe pas.");
 }
 if (!file_exists($blocked_file)) {
     file_put_contents($blocked_file, "");
 }
-$blocked_users = file($blocked_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+if (!file_exists($visits_file)) {
+    file_put_contents($visits_file, "");
+}
+
+$user_email = $_SESSION['email'];
+$blocked_users = [];
+
+// Lire les utilisateurs bloqués par l'utilisateur connecté
+$blocked_lines = file($blocked_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+foreach ($blocked_lines as $line) {
+    list($blocker, $blocked) = explode(',', $line);
+    if ($blocker == $user_email) {
+        $blocked_users[] = $blocked;
+    }
+}
+
 $lines = file($filename, FILE_IGNORE_NEW_LINES);
 $lines = array_reverse($lines);
-$user_email = $_SESSION['email'];
-$current_user_subscription = 'basique'; 
+
+$current_user_subscription = 'basique';
 foreach ($lines as $line) {
     $user_data = explode(',', $line);
     if ($user_data[7] == $user_email) {
         $current_user_subscription = $user_data[11];
         break;
     }
+}
+
+function recordVisit($visitorEmail, $visitedEmail) {
+    global $visits_file;
+    $visitRecord = $visitorEmail . ',' . $visitedEmail . ',' . date('Y-m-d H:i:s') . "\n";
+    file_put_contents($visits_file, $visitRecord, FILE_APPEND);
+}
+
+if (isset($_GET['visited_user_id'])) {
+    $visited_user_id = $_GET['visited_user_id'];
+    recordVisit($user_email, $visited_user_id);
+    header('Location: detail.php?user_id=' . $visited_user_id);
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -259,11 +290,11 @@ foreach ($lines as $line) {
             echo "<p><strong>Description physique:</strong> " . htmlspecialchars($user_data[4]) . "</p>";
             echo "<p><strong>Statut relationnel:</strong> " . htmlspecialchars($user_data[5]) . "</p>";
             echo "<p><strong>Ville:</strong> " . htmlspecialchars($user_data[6]) . "</p>";
-            echo "<a href='detail.php?user_id=" . htmlspecialchars($user_id) . "' class='profile-button'>Voir le détail</a>";
+            echo "<a href='?visited_user_id=" . htmlspecialchars($user_id) . "' class='profile-button'>Voir les détails</a>";
             echo "<button class='block-button' onclick='blockUser(\"" . htmlspecialchars($user_id) . "\")'>Bloquer</button>";
             echo "</div>";
             $count++;
-            if (($current_user_subscription == 'basique' ||$current_user_subscription == 'a') && $count >= 10) {
+            if (($current_user_subscription == 'basique' || $current_user_subscription == 'a') && $count >= 10) {
                 break;
             }
         }

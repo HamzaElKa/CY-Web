@@ -1,16 +1,22 @@
 <?php
-if (isset($_POST['user_id'])) {
-    $userId = $_POST['user_id'];
-    $blockedFile = 'utilisateurs_bloques.txt';
-    
-    // Lit le fichier et supprime l'utilisateur bloqué
-    $blockedUsers = file($blockedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (($key = array_search($userId, $blockedUsers)) !== false) {
-        unset($blockedUsers[$key]);
-    }
+session_start();
 
-    // Écrit les utilisateurs mis à jour dans le fichier
-    file_put_contents($blockedFile, implode(PHP_EOL, $blockedUsers) . PHP_EOL);
+if (isset($_POST['user_id']) && isset($_SESSION['email'])) {
+    $userId = $_POST['user_id'];
+    $blockerEmail = $_SESSION['email'];
+    $blockedFile = 'utilisateurs_bloques.txt';
+    $blockedUsers = file($blockedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $updatedBlockedUsers = [];
+    foreach ($blockedUsers as $line) {
+        list($blocker, $blocked) = explode(',', $line);
+        if ($blocker !== $blockerEmail || $blocked !== $userId) {
+            $updatedBlockedUsers[] = $line;
+        }
+    }
+    file_put_contents($blockedFile, implode(PHP_EOL, $updatedBlockedUsers) . PHP_EOL);
+    echo "Utilisateur débloqué avec succès.";
+} else {
+    echo "Erreur: données manquantes.";
 }
 ?>
 

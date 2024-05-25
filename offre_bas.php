@@ -25,8 +25,6 @@ function chercherEtModifierTxt($nomFichier, $chaineRecherchee, $chaineAjoutee) {
         
         fclose($fichierEntree);
         fclose($fichierSortie);
-        
-        // Remplace le fichier original par le fichier modifié
         if (rename($nomFichierTemporaire, $nomFichier)) {
             header("Location: page_profil.php");
         } else {
@@ -48,13 +46,11 @@ if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'] ?? '';
     $motDePasse = $_SESSION['password'] ?? '';
     $nouveauNomFichier = $_SESSION['newFileName'] ?? '';
-    $typeAbonnement = "basique"; // Type d'abonnement récupéré de la session
+    $typeAbonnement = "basique"; 
     $ligne = $prenom . ',' . $nom . ',' . $dateNaissance . ',' . $genre . ',' . $descriptionPhysique . ',' . $statutRelation . ',' . $ville . ',' . $email . ',' . $motDePasse . ',' . $nouveauNomFichier . ',' . $typeAbonnement . PHP_EOL;
-    $nomFichierTxt = "utilisateurs.txt"; // Changez ceci avec le nom de votre fichier texte
-
-    // Cherche et modifie le fichier texte
-    $chaineRecherchee = $email; // On suppose que vous cherchez par email
-    $chaineAjoutee = $typeAbonnement; // La chaîne que vous souhaitez ajouter
+    $nomFichierTxt = "utilisateurs.txt"; 
+    $chaineRecherchee = $email; 
+    $chaineAjoutee = $typeAbonnement;
     chercherEtModifierTxt($nomFichierTxt, $chaineRecherchee, $chaineAjoutee);
 } else {
     echo "Certaines informations de l'utilisateur sont manquantes dans la session.";
