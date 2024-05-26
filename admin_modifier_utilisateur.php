@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 Prénom: <input type="text" name="firstname" value="<?php echo $firstname; ?>" required><br>
                 Date de naissance: <input type="date" name="birthdate" value="<?php echo $birthdate; ?>" required><br>
                 Sexe: <input type="text" name="gender" value="<?php echo $gender; ?>" required><br>
-                Description physique: <textarea name="physical_description"><?php echo $physical_description; ?></textarea><br>
+                Interêt en voitures: <textarea name="physical_description"><?php echo $physical_description; ?></textarea><br>
                 Statut relationnel: <input type="text" name="relationship_status" value="<?php echo $relationship_status; ?>" required><br>
                 Ville: <input type="text" name="city" value="<?php echo $city; ?>" required><br>
                 <button type="submit">Mettre à jour</button>

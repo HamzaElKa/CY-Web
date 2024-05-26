@@ -316,7 +316,7 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
                 <label for="update-gender-femme">Femme</label>
             </div>
             <div class="form-group">
-                <label>Description physique</label>
+                <label>Interêt en voitures</label>
                 <textarea name="description" id="update-description"></textarea>
             </div>
             <div class="form-group">

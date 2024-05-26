@@ -287,7 +287,7 @@ if (isset($_GET['visited_user_id'])) {
             echo "<h2>" . htmlspecialchars($user_data[0]) . " " . htmlspecialchars($user_data[1]) . "</h2>";
             echo "<p><strong>Date de naissance:</strong> " . htmlspecialchars($user_data[2]) . "</p>";
             echo "<p><strong>Sexe:</strong> " . htmlspecialchars($user_data[3]) . "</p>";
-            echo "<p><strong>Description physique:</strong> " . htmlspecialchars($user_data[4]) . "</p>";
+            echo "<p><strong>Interêt en voitures:</strong> " . htmlspecialchars($user_data[4]) . "</p>";
             echo "<p><strong>Statut relationnel:</strong> " . htmlspecialchars($user_data[5]) . "</p>";
             echo "<p><strong>Ville:</strong> " . htmlspecialchars($user_data[6]) . "</p>";
             echo "<a href='?visited_user_id=" . htmlspecialchars($user_id) . "' class='profile-button'>Voir les détails</a>";
