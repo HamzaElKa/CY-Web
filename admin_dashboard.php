@@ -2,98 +2,89 @@
 
 session_start();
 
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Stocker les donnes du formulaire
-    $firstname = $_POST["firstname"];
-    $name = $_POST["name"];
-    $birthdate = $_POST["birthdate"];
-    $gender = $_POST["gender"];
-    $physical_description = isset($_POST["physical_description"]) ? $_POST["physical_description"] : "";
-    $relationship_status = isset($_POST["relationship_status"]) ? $_POST["relationship_status"] : "";
-    $city = $_POST["city"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $passwordConf = $_POST["passwordConf"];
-    $adminstatut = 0;
-    $subscriptionType = "a";
-    $profilePic = $_FILES['profile_pic'];
-
-    // Calcule l'age de l'utilisateur
-    $birthDate = new DateTime($birthdate);
-    $today = new DateTime();
-    $age = $today->diff($birthDate)->y;
-
-    // Vérifie si l'utilisateur a  18 ans
-    if ($age < 18) {
-        die("Vous devez avoir au moins 18 ans pour vous inscrire.");
-    }
-
-    // Vérifie si les mots de passe sont corrects
-    if ($password !== $passwordConf) {
-        die("Les mots de passe ne correspondent pas.");
-    }
-
-    // Fichiers pour stocker les utilisateurs et les bannissements
-    $filename = 'utilisateurs.txt';
-    $bannedFile = 'bannissements.txt';
-    $emailExists = false;
-
-    // Verifie si l'adresse email est bannie
-    if (file_exists($bannedFile)) {
-        $bannedEmails = file($bannedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if (in_array($email, $bannedEmails)) {
-            die("Erreur : Cette adresse email a été bannie.");
-        }
-    }
-
-    // Verifie si l'adresse email existe déjà
-    if (file_exists($filename)) {
-        $users = file($filename, FILE_IGNORE_NEW_LINES);
-        foreach ($users as $user) {
-            $user_data = explode(',', $user);
-            if ($user_data[7] == $email) {
-                $emailExists = true;
-                break;
-            }
-        }
-    }
-
-    // Si l'adresse email est deja utilisee, afficher une erreur
-    if ($emailExists) {
-        die("Cette adresse email est déjà utilisée.");
-    }
-//Télécharger les photos de profils et les placer
- 
-    if (isset($profilePic) && $profilePic['error'] === UPLOAD_ERR_OK) {
-        // Chemin temporaire du fichier
-        $fileTmpPath = $profilePic['tmp_name'];
-        $fileName = $profilePic['name'];
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
-        $newFileName = $email . '.' . $fileExtension;
-
-       
-        $uploadFileDir = 'images/';
-        $dest_path = $uploadFileDir . $newFileName;
-
-        if (move_uploaded_file($fileTmpPath, $dest_path)) {
-            // les donnes qui seront ecrites dans utilisateurs.txt
-            $data = $firstname . ',' . $name . ',' . $birthdate . ',' . $gender . ',' . $physical_description . ',' . $relationship_status . ',' . $city . ',' . $email . ',' . $password . ',' . $newFileName . ',' . $adminstatut . ',' . $subscriptionType . PHP_EOL;
-
-            // Écrit les données dans le fichier utilisateurs
-            file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);
-
-            // Redirige l'utilisateur vers la page de connexion
-            header("Location: page_connexion.html");
-            exit();
-        } else {
-            // Affiche une erreur si le telechargement a échoue
-            echo "Une erreur s'est produite lors du téléchargement de votre fichier.";
-        }
-    } else {
-        // Affiche une erreur si aucun fichier n'a ete telecharge
-        echo "Erreur: Aucun fichier téléchargé ou une erreur s'est produite lors du téléchargement.";
-    }
+// Vérifie si l'utilisateur est un administrateur
+if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+    // Redirige l'utilisateur vers la page d'accueil s'il n'est pas administrateur
+    header("Location: index.html");
+    exit();
 }
 ?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Ajout du style pour notre page*/
+        .header-buttons button, .content .white-block button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+     
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+
+        .white-block {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .white-block h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+   
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+   
+    <div class="bhead">
+        <a href="index.html">
+            <h1 class="header-title">Cardate</h1>
+        </a>
+        <div class="header-buttons">
+           
+            <a href="logout.php"><button type="button">Déconnexion</button></a>
+            <a href="page_profil.php"><button type="button">Profil</button></a>
+        </div>
+    </div>
+   
+    <!-- Les 3 boutton pour les redirections-->
+    <div class="content">
+        <div class="white-block">
+            <h2>Admin Dashboard</h2>
+            <div class="button-group">
+       
+                <a href="admin_utilisateurs.php"><button type="button">Gérer les utilisateurs</button></a>
+                <a href="admin_messagerie.php"><button type="button">Voir les messages</button></a>
+                <a href="admin_signalements.php"><button type="button">Gérer les messages signalés</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
