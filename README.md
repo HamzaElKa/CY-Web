@@ -32,7 +32,7 @@ Pour obtenir une copie de ce projet, vous pouvez utiliser soi le git clone ou le
     - Sélectionnez "Download ZIP".
     - Une fois le téléchargement est terminé, vous pouvez extraire le fichier ZIP sur un répertoire de votre choix.
 ## Ce que vous devriez savoir
-- Le site web utilise 4 fichiers .txt : utilisateurs.txt; visites.txt; utilisateurs_bloques.txt; signalements.txt; messages.txt et bannissements.txt.
+- Le site web utilise 6 fichiers .txt : utilisateurs.txt; visites.txt; utilisateurs_bloques.txt; signalements.txt; messages.txt et bannissements.txt.
 - Pour tous les codes PHP, les styles CSS sont intégrées dedans.
 - Vous pouvez modifier le chiffre 0 par 1 dans le fichier utilisateurs.txt pour pouvoir accéder au mode Admin, ou vous pouvez directement modifier cela en vous connectant dans un compte Admin.
 - Les photos doivent être obligatoirement de format .jpg ou .png.
