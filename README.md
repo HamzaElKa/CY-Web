@@ -35,6 +35,7 @@ Pour obtenir une copie de ce projet, vous pouvez utiliser soi le git clone ou le
 - Le site web utilise 4 fichiers .txt : utilisateurs.txt; visites.txt; utilisateurs_bloques.txt et signalements.txt.
 - Pour tous les codes PHP, les styles CSS sont intégrées dedans.
 - Vous pouviez modifier le chiffre 0 par 1 pour pouvoir accéder au mode Admin, ou vous pouviez directement modifier cela en vous connectant dans un compte Admin.
+- Les photos doivent être obligatoirement de format .jpg ou .png.
 ## Utilisation 
 - Pour pouvoir utiliser ce site web, vous devriez vous assurer que PHP est téléchargé et installé sur votre machine.
 - Dès que PHP est installé sur votre machine, veuillez accéder à votre terminal et lancer un Localhost en tapant : php -S localhost:8080.
