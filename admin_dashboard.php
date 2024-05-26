@@ -14,49 +14,7 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
 
 <head>
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Ajout du style pour notre page*/
-        .header-buttons button, .content .white-block button {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-     
-        .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-        }
-
-
-        .white-block {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        .white-block h2 {
-            font-size: 32px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-   
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style_admin_dash.css">
 </head>
 
 <body>
@@ -71,7 +29,6 @@ if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
             <a href="page_profil.php"><button type="button">Profil</button></a>
         </div>
     </div>
-   
     <!-- Les 3 boutton pour les redirections-->
     <div class="content">
         <div class="white-block">
