@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+<!--balise racine du fichier-->
 <html lang="fr">
+<!--meta données-->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +10,9 @@
     <title>INSCRIPTION</title>
     <link rel="stylesheet" href="style_insc.css">
 </head>
+
 <body>
+    <!--lien de redirection vers l'acceuil-->
     <a href="index.html" id="lien-accueil">
         <h1>Cardate</h1>
     </a>
@@ -15,7 +20,9 @@
         <h1>Créer un compte</h1>
     </header>
     <div class="containerRegistration">
-        <form method="POST" action="account_creation.php" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <!--formulaire d'inscription-->
+        <form method="POST" action="account_creation.php" enctype="multipart/form-data"
+            onsubmit="return validateForm()">
             <label for="firstname">Prénom</label><br>
             <input type="text" name="firstname" maxlength="20" required><br>
             <label for="name">Nom</label><br>
@@ -47,28 +54,36 @@
             <input type="password" name="passwordConf" maxlength="20" required><br>
             <label for="profile_pic">Photo de profil</label><br>
             <input type="file" name="profile_pic" id="profile_pic_input" accept="image/*"><br>
-            <img id="profile_pic_preview" src="#" alt="Prévisualisation de la photo de profil" style="display: none;"><br>
+            <img id="profile_pic_preview" src="#" alt="Prévisualisation de la photo de profil"
+                style="display: none;"><br>
             <button name="submit" type="submit">S'inscrire</button>
         </form>
+        <!--lien de redirection-->
         <a href="index.html">Revenir à l'accueil</a>
         <a href="page_connexion.html">Déjà membre ? Connectez-vous ici</a>
     </div>
     <script>
         function validateForm() {
+            //recuperation de la date de naissance.
             var birthdate = document.querySelector('input[name="birthdate"]').value;
+            //conversion en objet Date.
             var birthdateDate = new Date(birthdate);
+            //creation d'un objet pour la date actuelle.
             var today = new Date();
+            //calcul de l'age.
             var age = today.getFullYear() - birthdateDate.getFullYear();
+            //différence en entre le mois actuel et celui de naissance
             var m = today.getMonth() - birthdateDate.getMonth();
             if (m < 0 || (m === 0 && today.getDate() < birthdateDate.getDate())) {
                 age--;
             }
-
+            //verification de l'age.
             if (age < 18) {
                 alert("Vous devez avoir au moins 18 ans pour vous inscrire.");
-                return false;
+                return false;// si l'utilisateur a moins de 18 ans il ne peut pas créer un compte.
             }
 
+            //récupération des mots de passe.
             var email = document.querySelector('input[name="email"]').value;
             if (!validateEmail(email)) {
                 alert("L'adresse e-mail n'est pas valide.");
@@ -77,33 +92,41 @@
 
             var password = document.querySelector('input[name="password"]').value;
             var passwordConf = document.querySelector('input[name="passwordConf"]').value;
+            // vérification des mots de passes.
             if (password !== passwordConf) {
                 alert("Les mots de passe ne correspondent pas.");
-                return false;
+                return false;// si les mots de passent ne correspondent pas on ne peut pas soumettre le formulaire.
             }
 
-            return true;
+            return true; // permission de soumettre le forumulaire après toutes les vérifications.
         }
 
         function validateEmail(email) {
+            //format de base de l'adresse.
             var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            //test de l'email.
             return re.test(email);
         }
 
         function previewProfilePic(input) {
+            //verification des fichiers
             if (input.files && input.files[0]) {
+                //creation d'objet Filereader.
                 var reader = new FileReader();
+                //Création d'une fonction qui s'execute une fois que le fichier est chargé
                 reader.onload = function (e) {
                     document.getElementById('profile_pic_preview').style.display = 'block';
                     document.getElementById('profile_pic_preview').src = e.target.result;
                 }
-
+                //lecture du ficher.
                 reader.readAsDataURL(input.files[0]);
             }
+
         }
         document.getElementById('profile_pic_input').addEventListener('change', function () {
             previewProfilePic(this);
         });
     </script>
 </body>
+
 </html>

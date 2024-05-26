@@ -14,6 +14,7 @@ if (isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le profil</title>
     <style>
+    /* ajout du style pour notre page */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -101,6 +102,7 @@ if (isset($_SESSION['email'])) {
         }
     </style>
     <script>
+    //Cette fonction valide les informations saisies par l'utilisateur dans le formulaire de modification de profil.
         function validateForm() {
             var birthdate = document.querySelector('input[name="birthdate"]').value;
             var birthdateDate = new Date(birthdate);
@@ -154,6 +156,7 @@ if (isset($_SESSION['email'])) {
             <button onclick="window.location.href='dern_prof.php'">Consulter les profils</button>
         </div>
     </div>
+  <!--modifier les informations de l'utilisateur par celles saissies-->
     <form action="update_profil.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
         <label for="firstname">Prénom :</label>
         <input type="text" name="firstname" value="<?php echo $user_data[0]; ?>" required><br>

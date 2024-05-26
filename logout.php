@@ -1,5 +1,6 @@
 <?php
 session_start();
+//detruire la session pour se déconnecter
 $_SESSION = array();
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();

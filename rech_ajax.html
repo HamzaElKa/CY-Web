@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
             padding: 0;
             background-color: #f2f2f2;
         }
+
         .bhead {
             background-color: black;
             padding: 10px 20px;
@@ -18,13 +20,16 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header-title {
             color: white;
             margin: 0;
         }
+
         .header-buttons {
             display: flex;
         }
+
         .bhead button {
             background-color: red;
             color: white;
@@ -49,11 +54,11 @@
 
         .white-block {
             background-color: white;
-            padding: 40px; 
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
             text-align: center;
-            margin-top: 50px; 
+            margin-top: 50px;
         }
 
         .hero-section h2 {
@@ -73,14 +78,20 @@
         }
     </style>
 </head>
+
 <body>
+    <!--Bouton de navigation dans l'en-tete de la page-->
     <div class="bhead">
+        <!--lien ver la page d'acceuil-->
         <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
+            <!--formulaire avec lien vers les autres pages-->
             <form>
+                <!--lien pour consultation de profil-->
                 <a href="dern_prof.php">
                     <button type="button">Consulter les profils</button>
                 </a>
+                <!--lien pour la page profil utilisateur-->
                 <a href="page_profil.php">
                     <button type="button">Votre profil</button>
                 </a>
@@ -90,26 +101,35 @@
     <div class="content">
         <div class="white-block hero-section">
             <h2>Recherche</h2>
-            <input type="text" id="searchInput" placeholder="*******" style="width: 300px; height: 40px; font-size: 16px;"> 
-            <button onclick="search()" style="height: 40px; font-size: 16px;">Search</button> 
+            <!--champ pour saisir la recherche-->
+            <input type="text" id="searchInput" placeholder="*******"
+                style="width: 300px; height: 40px; font-size: 16px;">
+            <!--lancer la recherche-->
+            <button onclick="search()" style="height: 40px; font-size: 16px;">Search</button>
             <div id="profiles"></div>
         </div>
     </div>
     <script>
         function search() {
             var input, filter;
+            //récupération de la valeur du champ de recherche.
             input = document.getElementById('searchInput');
+            //conversion en minuscules
             filter = input.value.toLowerCase();
-
+            //création d'un objet pour la communication avec le serveur
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
+            xmlhttp.onreadystatechange = function () {
+                //vérifiation de l'état de la requete.
                 if (this.readyState == 4 && this.status == 200) {
+                    //mise à jour du contenu de l'elmt ayant "profiles" comme id
                     document.getElementById("profiles").innerHTML = this.responseText;
                 }
             };
+            //connexion get avec le script "search.php"
             xmlhttp.open("GET", "search.php?query=" + filter, true);
             xmlhttp.send();
         }
     </script>
 </body>
+
 </html>

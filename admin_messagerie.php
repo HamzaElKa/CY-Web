@@ -1,20 +1,29 @@
 <?php
+
 session_start();
+
+// Vérifie si l'utilisateur est un admin
 if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+    // Redirige l'utilisateur vers la page d'accueil s'il n'est pas administrateur
     header("Location: index.html");
     exit();
 }
+
 
 $usersFile = 'utilisateurs.txt';
 $messagesFile = 'messages.txt';
 $reportsFile = 'signalements.txt';
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Vérifie si l'action de suppression de message est déclenchée
     if (isset($_POST['delete_message'])) {
         $messageIndex = $_POST['message_index'];
 
+        // Charge les messages depuis le fichier
         $messages = file($messagesFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if (isset($messages[$messageIndex])) {
+            // Supprime le message et renitialiser le fichier avec les nouvelles informations
             unset($messages[$messageIndex]);
             file_put_contents($messagesFile, implode(PHP_EOL, $messages) . PHP_EOL);
             echo "Message supprimé avec succès.";
@@ -22,10 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Charge les utilisateurs depuis le fichier
 $users = file($usersFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 $selectedUser = isset($_GET['email']) ? $_GET['email'] : null;
 $userMessages = [];
 
+// Si un utilisateur est sélectionné, charge ses messages et les afficher
 if ($selectedUser) {
     $messages = file($messagesFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($messages as $message) {
@@ -36,6 +47,7 @@ if ($selectedUser) {
     }
 }
 
+// Charge les signalements depuis le fichier
 $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 ?>
 
@@ -47,6 +59,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des messages</title>
     <style>
+        /* ajout du style pour notre page*/
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -54,6 +67,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             background: url('voiture2.jpg') repeat;
         }
 
+       
         .header-title {
             margin: 0;
             padding: 0;
@@ -61,6 +75,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             font-size: 24px;
         }
 
+     
         .header-title a {
             color: white;
             text-decoration: none;
@@ -70,6 +85,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             text-decoration: underline;
         }
 
+     
         .bhead {
             background: #000;
             padding: 10px 20px;
@@ -78,6 +94,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             align-items: center;
         }
 
+       
         .header-buttons {
             display: flex;
             align-items: center;
@@ -88,7 +105,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             gap: 10px;
             margin-left: auto;
         }
-
+/* Pour mettre les boutons dashboard et profil en rouge */
         .bhead button, .header-buttons a {
             background: red;
             color: #fff;
@@ -105,6 +122,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             background-color: #c40000;
         }
 
+        /*Pour centrer les bouttons */
         .centered-button {
             display: flex;
             justify-content: center;
@@ -116,6 +134,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             font-size: 18px;
         }
 
+        /* Styles pour les titres */
         h1, h2 {
             text-align: left;
             margin: 20px;
@@ -124,6 +143,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             text-shadow: 2px 2px 4px #000000;
         }
 
+        /* Style du tableau  */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -142,6 +162,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             text-align: left;
         }
 
+       
         .form-group {
             margin-bottom: 15px;
         }
@@ -158,6 +179,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             box-sizing: border-box;
         }
 
+       
         button, .button-red {
             padding: 10px 20px;
             background-color: red;
@@ -176,19 +198,24 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 </head>
 
 <body>
+
     <div class="bhead">
         <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
             <div class="button-group">
+ 
                 <a href="admin_dashboard.php">Dashboard</a>
                 <a href="page_profil.php">Profil</a>
             </div>
         </div>
     </div>
+
     <div class="centered-button">
         <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
     </div>
+ 
     <h1>Gestion des messages :</h1>
+   
     <h2>Liste de tous les utilisateurs enregistrés :</h2>
     <table>
         <thead>
@@ -200,6 +227,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             </tr>
         </thead>
         <tbody>
+             
             <?php foreach ($users as $user) : ?>
                 <?php $user_data = explode(',', $user); ?>
                 <tr>
@@ -207,12 +235,14 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                     <td><?php echo htmlspecialchars($user_data[1]); ?></td>
                     <td><?php echo htmlspecialchars($user_data[7]); ?></td>
                     <td>
+             
                         <a href="admin_messagerie.php?email=<?php echo htmlspecialchars($user_data[7]); ?>" class="button-red">Voir les messages</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+
 
     <?php if ($selectedUser) : ?>
         <h2>Messages de <?php echo htmlspecialchars($selectedUser); ?></h2>
@@ -227,6 +257,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                 </tr>
             </thead>
             <tbody>
+               
                 <?php foreach ($userMessages as $index => $message) : ?>
                     <?php $message_data = explode('|', $message); ?>
                     <tr>
@@ -235,6 +266,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                         <td><?php echo htmlspecialchars($message_data[2]); ?></td>
                         <td><?php echo htmlspecialchars($message_data[3]); ?></td>
                         <td>
+                       
                             <form method="post" style="display:inline;">
                                 <input type="hidden" name="message_index" value="<?php echo $index; ?>">
                                 <button type="submit" name="delete_message">Supprimer</button>
@@ -246,6 +278,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         </table>
     <?php endif; ?>
 
+   
     <h1>Signalements de messages :</h1>
     <table>
         <thead>
@@ -261,6 +294,7 @@ $reports = file($reportsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             </tr>
         </thead>
         <tbody>
+            <!-- Boucle pour afficher chaque signalement -->
             <?php foreach ($reports as $index => $report) : ?>
                 <?php $report_data = explode('|', $report); ?>
                 <tr>

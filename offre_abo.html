@@ -8,7 +8,9 @@
 </head>
 <body></body>
 <div class="barre-noire">
+    <!-- Affichage des offres -->
     <div class="header-buttons">
+        <!-- Affichage des boutons de redirection -->
         <button onclick="window.location.href='page_profil.php'">Retour au profil</button>
         <button onclick="window.location.href='modifier_profil.php'">Modifier le profil</button>
     </div>
@@ -16,22 +18,25 @@
 <div class="content">
     <div id="offres">
         <div class="offre">
+            <!-- Affichage de l'offre basique-->
             <h3>Basique</h3>
             <p>Prix: 5 € par mois</p>
             <p>Fonctionnalités: Accès limité aux profils des utilisateurs, pas de messagerie.</p>
-            <button onclick="window.location.href='offre_bas.php'">Choisir cette offre</button>
+            <button onclick="window.location.href='offre_bas.php'">Choisir cette offre</button><!-- Enregistrer l'offre-->
         </div>
         <div class="offre">
+            <!-- Affichage de l'offre premium-->
             <h3>Premium</h3>
             <p>Prix: 40 € pour 1 an</p>
             <p>Fonctionnalités: Accès illimité à toutes les fonctionnalités du site.</p>
-            <button onclick="choisirOffre('offre_prem.php')">Choisir cette offre</button>
+            <button onclick="choisirOffre('offre_prem.php')">Choisir cette offre</button><!-- Enregistrer l'offre-->
         </div>
         <div class="offre">
+            <!-- Affichage de l'offre essai-->
             <h3>Essai</h3>
             <p>Prix: 2 € pour 24 heures</p>
             <p>Fonctionnalités: Accès complet à toutes les fonctionnalités du site pendant la période d'essai.</p>
-            <button onclick="choisirOffre('offre_essai.php')">Choisir cette offre</button>
+            <button onclick="choisirOffre('offre_essai.php')">Choisir cette offre</button><!-- Enregistrer l'offre-->
         </div>
     </div>
 </div>

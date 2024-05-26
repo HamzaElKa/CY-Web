@@ -10,7 +10,7 @@ $fichier_bannis = 'bannissements.txt';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update_user'])) {
-        // Handle user update
+    // recupére les donnés de l'utilisateur aprés la mise à jour
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
         $lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $updatedUsers = [];
-
+// Parcourt chaque utilisateur pour trouver et mettre à jour les informations de l'utilisateur correspondant
         foreach ($users as $user) {
             $user_data = explode(',', $user);
             if ($user_data[7] == $email) {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             $updatedUsers[] = implode(',', $user_data);
         }
-
+// Enregistre les utilisateurs mis à jour dans le fichier
         file_put_contents($fichier_utilisateurs, implode(PHP_EOL, $updatedUsers) . PHP_EOL);
         echo "Utilisateur mis à jour avec succès.";
     } elseif (isset($_POST['delete_user'])) {
@@ -75,6 +75,7 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
     <title>Gestion des utilisateurs</title>
     <style>
         body {
+        /*ajout du style pour notre page */
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -202,16 +203,17 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
         }
 
         .centered-button button {
-            padding: 20px 40px; /* Increase the size of the button */
-            font-size: 18px; /* Increase the font size */
+            padding: 20px 40px;
+            font-size: 18px;
         }
     </style>
     <script>
+    // Fonction pour valider le formulaire (peut être personnalisée si nécessaire)
         function validateForm() {
-            // Add form validation logic here if needed
+           
             return true;
         }
-
+// Fonction pour afficher le formulaire de mise à jour avec les données de l'utilisateur sélectionné
         function showUpdateForm(email, firstname, lastname, birthdate, gender, description, relationship_status, city, is_admin, subscription_type) {
             document.getElementById('update-email').value = email;
             document.getElementById('update-firstname').value = firstname;
@@ -255,6 +257,7 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
             </tr>
         </thead>
         <tbody>
+        <!-- Boucle pour afficher chaque utilisateur -->
             <?php foreach ($users as $user) : ?>
                 <?php $user_data = explode(',', $user); ?>
                 <tr>
@@ -288,7 +291,7 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
             <?php endforeach; ?>
         </tbody>
     </table>
-
+<!-- Modifier toutes les informations de l'utilisateur par l'admin-->
     <div id="update-form">
         <h2>Modifier les informations de l'utilisateur</h2>
         <form method="post" onsubmit="return validateForm()">
@@ -340,6 +343,7 @@ $users = file($fichier_utilisateurs, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LIN
                     <option value="1">Oui</option>
                 </select>
             </div>
+            <!-- modifier son type d'abonnement aussi-->
             <div class="form-group">
                 <label>Type d'abonnement</label>
                 <select name="subscription_type" id="update-subscription_type" required>

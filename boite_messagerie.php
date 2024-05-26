@@ -1,53 +1,69 @@
 <?php
 session_start();
+
+// Vérifie si l'utilisateur est connecté, sinon redirige vers la page de connexion
 if (!isset($_SESSION['email'])) {
     header("Location: page_connexion.html");
     exit();
 }
 
+// Récupère le destinataire depuis l'URL
 $recipient = isset($_GET['recipient']) ? $_GET['recipient'] : '';
 $recipient_name = '';
 
+// Recherche le nom complet du destinataire dans le fichier utilisateurs.txt
 if ($recipient) {
     $filename = 'utilisateurs.txt';
     if (file_exists($filename)) {
+        // Lit le fichier ligne par ligne
         $users = file($filename, FILE_IGNORE_NEW_LINES);
         foreach ($users as $user) {
             $user_data = explode(',', $user);
+            // Vérifie si l'email correspond au destinataire
             if ($user_data[7] === $recipient) {
+                // Utilise htmlspecialchars pour éviter les injections de code HTML
                 $recipient_name = htmlspecialchars($user_data[0] . ' ' . $user_data[1]);
                 break;
             }
         }
     }
 }
+
+// Envoi d'un message
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !isset($_POST['delete'])) {
     $message = trim($_POST['message']);
     if ($message !== '' && $recipient) {
         $filename = 'messages.txt';
         $sender = $_SESSION['email'];
         $timestamp = date('Y-m-d H:i:s');
+        // Construit la ligne de message avec l'expéditeur, le destinataire, l'horodatage et le contenu du message
         $message_line = $sender . '|' . $recipient . '|' . $timestamp . '|' . $message;
+        // Ajoute la ligne au fichier messages.txt
         file_put_contents($filename, $message_line . PHP_EOL, FILE_APPEND);
         header("Location: boite_messagerie.php?recipient=" . urlencode($recipient));
         exit();
     }
 }
+
+// Suppression d'un message
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     $timestamp_to_delete = $_POST['delete'];
     $filename = 'messages.txt';
     if (file_exists($filename)) {
+        // Lit tous les messages du fichier
         $messages = file($filename, FILE_IGNORE_NEW_LINES);
         $updated_messages = [];
         foreach ($messages as $message) {
             $message_data = explode('|', $message);
             if (count($message_data) === 4) {
                 $timestamp = $message_data[2];
+                // Ajoute à la liste des messages mis à jour ceux qui ne correspondent pas à l'horodatage à supprimer
                 if ($timestamp !== $timestamp_to_delete) {
                     $updated_messages[] = $message;
                 }
             }
         }
+        // Écrit les messages mis à jour dans le fichier
         file_put_contents($filename, implode("\n", $updated_messages));
         header("Location: boite_messagerie.php?recipient=" . urlencode($recipient));
         exit();
@@ -63,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     <title>Boîte de messagerie</title>
     <style>
         body {
+            /* Styles CSS */
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -306,15 +323,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <h2>Utilisateurs</h2>
             <ul>
                 <?php
+                // Affiche la liste des utilisateurs
                 $filename = 'utilisateurs.txt';
                 if (file_exists($filename)) {
                     $users = file($filename, FILE_IGNORE_NEW_LINES);
                     foreach ($users as $user) {
                         $user_data = explode(',', $user);
-                        if ($user_data[7] !== $_SESSION['email']) { 
+                        if ($user_data[7] !== $_SESSION['email']) {
+                            // Vérifie si l'image de profil existe, sinon utilise une image par défaut
                             $profile_pic = 'images/' . $user_data[9];
                             if (!file_exists($profile_pic)) {
-                                $profile_pic = 'images/default.jpg'; 
+                                $profile_pic = 'images/default.jpg';
                             }
                             echo '<li><img src="' . htmlspecialchars($profile_pic) . '" alt="Photo de profil"><a href="boite_messagerie.php?recipient=' . urlencode($user_data[7]) . '">' . htmlspecialchars($user_data[0]) . ' ' . htmlspecialchars($user_data[1]) . '</a></li>';
                         }
@@ -333,6 +352,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <?php endif; ?>
             <div class="messages">
                 <?php
+                // Affiche les messages entre l'utilisateur connecté et le destinataire sélectionné
                 if ($recipient) {
                     $filename = 'messages.txt';
                     if (file_exists($filename)) {
@@ -345,6 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                                 $timestamp = htmlspecialchars($message_data[2]);
                                 $content = htmlspecialchars($message_data[3]);
 
+                                // Affiche le message seulement s'il est envoyé ou reçu par l'utilisateur connecté
                                 if (($sender === $_SESSION['email'] && $recipient_in_message === $recipient) ||
                                     ($sender === $recipient && $recipient_in_message === $_SESSION['email'])
                                 ) {
@@ -376,8 +397,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <?php endif; ?>
         </div>
     </div>
-
-    <!-- Modal for reporting messages -->
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -401,6 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     </div>
 
     <script>
+        // Ouvre le modal de signalement de message
         function openModal(sender, recipient, date, message) {
             document.getElementById('modalSender').value = sender;
             document.getElementById('modalRecipient').value = recipient;
@@ -409,10 +429,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             document.getElementById('reportModal').style.display = "block";
         }
 
+        // Ferme le modal de signalement de message
         function closeModal() {
             document.getElementById('reportModal').style.display = "none";
         }
 
+        // Ferme le modal si l'utilisateur clique en dehors
         window.onclick = function(event) {
             if (event.target == document.getElementById('reportModal')) {
                 closeModal();

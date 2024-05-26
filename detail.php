@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Details</title>
     <style>
+    /* ajout du style pour notre page */
         body {
+       
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -119,6 +121,7 @@
 </head>
 
 <body>
+<!-- bouton pour revenir à l'acceuil-->
     <div class="bhead">
         <div class="header-title">
         <a href="index.html">Cardate</a>
@@ -129,6 +132,7 @@
         </div>
     </div>
     <h1>Details du profil</h1>
+   
     <div class="profile-details">
         <?php
         $user_id = $_GET['user_id'];
@@ -136,6 +140,7 @@
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
         foreach ($lines as $line) {
             $user_data = explode(',', $line);
+//detail du profil de l'utilisateur séléctionner en affichant toutes ses informations//
             if ($user_data[7] == $user_id) {
                 echo "<img src='images/" . $user_data[9] . "' alt='Photo de profil'>";
                 echo "<p><strong>Nom:</strong> " . $user_data[0] . "</p>";

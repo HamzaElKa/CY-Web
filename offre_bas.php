@@ -1,28 +1,30 @@
 <?php
 session_start();
 
-// Fonction pour chercher et modifier le fichier texte
-function chercherEtModifierTxt($nomFichier, $chaineRecherchee, $chaineAjoutee) {
+//fonction pour modifier notre base de données qui est un fichier texte.
+function chercherEtModifierTxt($nomFichier, $chaineRecherchee, $chaineAjoutee)
+{
+    // creation d'un fichier temporaire.
     $nomFichierTemporaire = 'temp_' . $nomFichier;
     $fichierEntree = fopen($nomFichier, 'r');
     $fichierSortie = fopen($nomFichierTemporaire, 'w');
-    
+
     if ($fichierEntree && $fichierSortie) {
         while (($ligne = fgets($fichierEntree)) !== FALSE) {
-            // Vérifie si la chaîne de recherche est dans la ligne
+            //verification de l'emplacement de la chaine de caractère et recuperation de la ligne où elle se trouve.
             if (strpos($ligne, $chaineRecherchee) !== FALSE) {
-                // Diviser la ligne en un tableau de sous-chaînes séparées par des virgules
+                //conversion de la ligne en tableau 
                 $sous_chaines = explode(',', $ligne);
 
-                // Supprimer les deux derniers éléments du tableau
+                // suppression du dernier elements du tableau.
                 array_splice($sous_chaines, -1);
 
-                // Rejoindre les sous-chaînes restantes en une seule chaîne, séparées par des virgules
+                // conversion du nouveau tableau en chain de caractère séparée par des virgules.
                 $ligne = implode(',', $sous_chaines) . ',' . $chaineAjoutee . PHP_EOL;
             }
             fwrite($fichierSortie, $ligne);
         }
-        
+
         fclose($fichierEntree);
         fclose($fichierSortie);
         if (rename($nomFichierTemporaire, $nomFichier)) {
@@ -46,13 +48,12 @@ if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'] ?? '';
     $motDePasse = $_SESSION['password'] ?? '';
     $nouveauNomFichier = $_SESSION['newFileName'] ?? '';
-    $typeAbonnement = "basique"; 
+    $typeAbonnement = "basique";
     $ligne = $prenom . ',' . $nom . ',' . $dateNaissance . ',' . $genre . ',' . $descriptionPhysique . ',' . $statutRelation . ',' . $ville . ',' . $email . ',' . $motDePasse . ',' . $nouveauNomFichier . ',' . $typeAbonnement . PHP_EOL;
-    $nomFichierTxt = "utilisateurs.txt"; 
-    $chaineRecherchee = $email; 
+    $nomFichierTxt = "utilisateurs.txt";
+    $chaineRecherchee = $email;
     $chaineAjoutee = $typeAbonnement;
     chercherEtModifierTxt($nomFichierTxt, $chaineRecherchee, $chaineAjoutee);
 } else {
     echo "Certaines informations de l'utilisateur sont manquantes dans la session.";
 }
-?>

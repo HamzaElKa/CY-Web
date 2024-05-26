@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 if (!isset($_SESSION['email'])) {
     die("Utilisateur non connecté.");
 }
-
+//recupere l'email de l'utilisateur bloque
 $user_email = $_SESSION['email'];
 $blocked_file = 'utilisateurs_bloques.txt';
 $blocked_users = [];
@@ -28,6 +28,7 @@ foreach ($blocked_lines as $line) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Utilisateurs Bloqués</title>
     <style>
+    /* ajout du style pour notre page */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -157,6 +158,7 @@ foreach ($blocked_lines as $line) {
         }
     </style>
     <script>
+    //fonction javascriptpour débloquer un utilisateur
         function unblockUser(userId) {
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", "unblock_user.php", true);

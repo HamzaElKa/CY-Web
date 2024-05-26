@@ -3,11 +3,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-
+//definir les fichiers qu'on doit utiliser
 $filename = 'utilisateurs.txt';
 $blocked_file = 'utilisateurs_bloques.txt';
 $visits_file = 'visites.txt';
-
+//verifier l'existence des fichiers
 if (!file_exists($filename)) {
     die("Le fichier des utilisateurs n'existe pas.");
 }
@@ -17,7 +17,7 @@ if (!file_exists($blocked_file)) {
 if (!file_exists($visits_file)) {
     file_put_contents($visits_file, "");
 }
-
+//definir les variables
 $user_email = $_SESSION['email'];
 $blocked_users = [];
 
@@ -32,7 +32,7 @@ foreach ($blocked_lines as $line) {
 
 $lines = file($filename, FILE_IGNORE_NEW_LINES);
 $lines = array_reverse($lines);
-
+//definir l'abonnement de l'utilisateur
 $current_user_subscription = 'basique';
 foreach ($lines as $line) {
     $user_data = explode(',', $line);
@@ -41,17 +41,17 @@ foreach ($lines as $line) {
         break;
     }
 }
-
+//fonction pour enregistrer les visites
 function recordVisit($visitorEmail, $visitedEmail) {
     global $visits_file;
     $visitRecord = $visitorEmail . ',' . $visitedEmail . ',' . date('Y-m-d H:i:s') . "\n";
     file_put_contents($visits_file, $visitRecord, FILE_APPEND);
 }
-
+//si l'utilisateur visite un profil
 if (isset($_GET['visited_user_id'])) {
     $visited_user_id = $_GET['visited_user_id'];
-    recordVisit($user_email, $visited_user_id);
-    header('Location: detail.php?user_id=' . $visited_user_id);
+    recordVisit($user_email, $visited_user_id); //enregistrer la visite
+    header('Location: detail.php?user_id=' . $visited_user_id); //rediriger vers la page de profil de celui souhaité
     exit();
 }
 ?>
@@ -60,8 +60,9 @@ if (isset($_GET['visited_user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Engine</title>
+    <title>Profils</title>
     <style>
+        /*styles CSS*/
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -240,36 +241,48 @@ if (isset($_GET['visited_user_id'])) {
             background-color: #c40000;
         }
     </style>
-    <script>
-        function blockUser(userId) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "block_user.php", true);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    alert(this.responseText);
-                    location.reload();
-                } else if (this.readyState == 4) {
-                    alert("Erreur lors du blocage de l'utilisateur.");
-                }
-            };
-            xhttp.send("user_id=" + userId);
-        }
-
-        function showBlockedUsers() {
-            window.location.href = 'get_blocked_users.php';
-        }
-
-        function closeModal() {
-            var modal = document.getElementById('blockedUsersModal');
-            modal.style.display = 'none';
-        }
-    </script>
+<script>
+    // Déclare une fonction pour bloquer un utilisateur en utilisant son identifiant 
+    function blockUser(userId) { 
+        // Crée une nouvelle instance de XMLHttpRequest pour envoyer une requête HTTP
+        var xhttp = new XMLHttpRequest(); 
+        // Initialise une requête HTTP POST vers le fichier block_user.php
+        xhttp.open("POST", "block_user.php", true); 
+        // Définit l'en-tête de la requête pour spécifier le type de contenu
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // Définit une fonction de rappel (callback) qui sera exécutée à chaque changement d'état de la requête
+        xhttp.onreadystatechange = function() {
+            // Vérifie si la requête est terminée et que la réponse est OK
+            if (this.readyState == 4 && this.status == 200) {
+                // Affiche une alerte avec le texte de la réponse reçue
+                alert(this.responseText);
+                // Recharge la page actuelle pour refléter les changements
+                location.reload();
+            } else if (this.readyState == 4) {
+                // Si la requête est terminée mais que le statut n'est pas 200, affiche un message d'erreur
+                alert("Erreur lors du blocage de l'utilisateur.");
+            }
+        };
+        // Envoie la requête avec les données nécessaires 
+        xhttp.send("user_id=" + userId);
+    }
+    // Déclare une fonction pour afficher la liste des utilisateurs bloqués
+    function showBlockedUsers() {
+        // Redirige le navigateur vers la page get_blocked_users.php
+        window.location.href = 'get_blocked_users.php';
+    }
+    // Déclare une fonction pour fermer une fenêtre modale
+    function closeModal() {
+        var modal = document.getElementById('blockedUsersModal');
+        modal.style.display = 'none';
+    }
+</script>
 </head>
 <body>
     <div class="bhead">
         <h1 class="header-title"><a href="index.html">Cardate</a></h1>
         <div class="header-buttons">
+            <!-- Mettre le bouton de recherche-->
             <button onclick="window.location.href='rech_ajax.html'">Recherche</button>
         </div>
     </div>
@@ -282,6 +295,7 @@ if (isset($_GET['visited_user_id'])) {
             if ($user_id == $user_email || in_array($user_id, $blocked_users)) {
                 continue;
             }
+            //afichage des informations des profils
             echo "<div class='profile'>";
             echo "<img src='images/" . htmlspecialchars($user_data[9]) . "' alt='Photo de profil'>";
             echo "<h2>" . htmlspecialchars($user_data[0]) . " " . htmlspecialchars($user_data[1]) . "</h2>";
@@ -294,12 +308,13 @@ if (isset($_GET['visited_user_id'])) {
             echo "<button class='block-button' onclick='blockUser(\"" . htmlspecialchars($user_id) . "\")'>Bloquer</button>";
             echo "</div>";
             $count++;
-            if (($current_user_subscription == 'basique' || $current_user_subscription == 'a') && $count >= 10) {
+            if (($current_user_subscription == 'basique' || $current_user_subscription == 'a') && $count >= 10) { //si l'utilisateur n'as qu'un abonnement simple
                 break;
             }
         }
         ?>
     </div>
+    <!-- bouton vers l'affichafe des utilisateurs bloqués-->
     <button class="blocked-users-btn" onclick="showBlockedUsers()">Voir les utilisateurs bloqués</button>
 </body>
 </html>
